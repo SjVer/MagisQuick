@@ -1,14 +1,14 @@
-from django.forms import ModelForm
+from django.forms import BaseModelForm
 from .models import EUser
 
-class EUserCreationForm(ModelForm):
 
+class EUserCreationForm(BaseModelForm):
     class Meta:
         model = EUser
         fields = ("email",)
 
-class EUserChangeForm(ModelForm):
 
+class EUserChangeForm(BaseModelForm):
     class Meta:
         model = EUser
         fields = ("email",)
