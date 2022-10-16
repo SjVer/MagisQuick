@@ -1,8 +1,10 @@
+SHELL := /bin/bash
+
 start:
 	source env/bin/activate
 
 stop:
-	source env/bin/deactivate
+	source venv/bin/deactivate
 
 migrate:
 	python manage.py migrate
