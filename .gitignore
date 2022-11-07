@@ -1,4 +1,5 @@
 src/__pycache__/
+src/user/__pycache__/
 db.sqlite3
 
 venv/

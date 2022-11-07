@@ -1,28 +1,24 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import EUser
 from .forms import EUserCreationForm, EUserChangeForm
+from .models import EUser
 
-class EUserAdmin(admin.ModelAdmin):
-	# The forms to add and change user instances
-	form = EUserChangeForm()
-	add_form = EUserCreationForm()
-
-	# The fields to be used in displaying the CocoUser model.
-	# These override the definitions on the base UserAdmin that reference specific fields on auth.User.
-	list_display = ('id', 'email', 'is_superuser', 'is_staff',)
-	list_filter = ('is_superuser',)
-	fieldsets = (
-		(None, {'fields': ('is_superuser', 'is_staff', 'email',)}),
-	)
-	add_fieldsets = (
-		(None, {
-			'classes': ('wide',),
-			'fields': ('email')}
-		),
-	)
-	search_fields = ('id', 'email')
-	ordering = ('email',)
-	filter_horizontal = ()
-
-admin.site.register(EUser, EUserAdmin)
+class EUserAdmin(UserAdmin):
+    add_form = EUserCreationForm
+    form = EUserChangeForm
+    model = EUser
+    list_display = ('email', 'is_staff', 'is_active',)
+    list_filter = ('email', 'is_staff', 'is_active',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
+        ),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
