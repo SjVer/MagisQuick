@@ -18,6 +18,7 @@ from django.urls import path, include
 
 from .views.root import root_view
 from .views.login import login_view
+from .views.boeken import boeken_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +35,7 @@ urlpatterns = [
     # path('accounts/', include("django.contrib.auth.urls")),
     
     path('login/', login_view),
+    path('boeken/', boeken_view),
     
     path('', root_view)
 ]
