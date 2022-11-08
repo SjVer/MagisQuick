@@ -1,0 +1,59 @@
+
+def test(username, passwd, school):
+    import time
+
+    import random
+    import hashlib
+    import base64
+    verifier = ''.join(random.SystemRandom().choice("abcdef0123456789") for _ in range(128)) 
+    state = ''.join(random.SystemRandom().choice("abcdef0123456789") for _ in range(32))
+    nonce = ''.join(random.SystemRandom().choice("abcdefhijklmnopqrstuvwxyz") for _ in range(16))
+    challenge = base64.urlsafe_b64encode(str(hashlib.sha256(verifier.encode("ascii"))).encode("ascii"))
+
+    driver = setup_driver()
+
+    driver.get(
+        "https://accounts.magister.net/connect/authorize?"\
+        "client_id=M6LOAPP&redirect_uri=m6loapp%3A%2F%2Foauth2redirect%2F&"\
+        "scope=openid%20profile%20offline_access%20magister.mobile%20magister.ecs"\
+        f"&response_type=code%20id_token&state=${state}&nonce=${nonce}&code_challenge=${challenge}"\
+        "&code_challenge_method=S256&prompt=select_account"
+    )
+    print(f"opening accounts.magister.net...")
+
+    # enter school
+    elem = wait_for_element(driver, "scholenkiezer_value")
+    print("entering school...")
+    elem.clear()
+    elem.send_keys(school)
+    WebDriverWait(driver, 10).until(
+        EC.text_to_be_present_in_element_attribute(
+            (By.CLASS_NAME, "input-drop-down-list-item"),
+            "innerText", school
+        )
+    )
+    elem.send_keys(Keys.RETURN)
+
+    # enter username
+    elem = wait_for_element(driver, "username")
+    print("entering username...")
+    elem.clear()
+    elem.send_keys(username)
+    elem.send_keys(Keys.RETURN)
+
+    # enter password
+    elem = wait_for_element(driver, "rswp_password")
+    print("entering password...")
+    elem.clear()
+    elem.send_keys(passwd)
+    elem.send_keys(Keys.RETURN)
+    
+    # wait for redirect
+    print("waiting for redirect...")
+    # WebDriverWait(driver, 500).until(EC.url_changes(old_url))
+    # responses = list(filter(lambda r: r.response, driver.requests))
+
+    
+    time.sleep(1000)
+
+    driver.quit()
