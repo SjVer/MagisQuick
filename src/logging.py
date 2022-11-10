@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+import termcolor as tc
 
 ERROR = 0
 WARNING = 1
@@ -7,21 +8,20 @@ DEBUG = 3
 
 log_level = DEBUG
 
-def log(level, *args, **kwargs):
+def log(level, msg):
     if level > log_level: return
 
-    level_string = [
-        "ERROR  ",
-        "WARNING",
-        "INFO   ",
-        "DEBUG  ",
+    level_string, color = [
+        ("ERROR  ", "red"),
+        ("WARNING", "yellow"),
+        ("INFO   ", "cyan"),
+        ("DEBUG  ", "green"),
     ][level]
     
     time = dt.now().strftime("%H:%M:%S")
-    print(f"[{level_string} - {time}] ", end="")
-    print(*args, **kwargs)
+    tc.cprint(f"[{level_string} - {time}] {msg}", color)
     
-def error(*args, **kwargs): log(ERROR, *args, **kwargs)
-def warning(*args, **kwargs): log(WARNING, *args, **kwargs)
-def info(*args, **kwargs): log(INFO, *args, **kwargs)
-def debug(*args, **kwargs): log(DEBUG, *args, **kwargs)
+def error(msg):   log(ERROR, msg)
+def warning(msg): log(WARNING, msg)
+def info(msg):    log(INFO, msg)
+def debug(msg):   log(DEBUG, msg)

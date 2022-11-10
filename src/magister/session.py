@@ -1,6 +1,5 @@
-from typing import TypedDict
-from dataclasses import dataclass
-
+from .. import logging
+from ..user.models import EUser
 from .requests import get
 from .auth import authenticate
 
@@ -9,56 +8,64 @@ __all__ = [
     "MagisterSession"
 ]
 
-class UserInfo(TypedDict):
-    preferred_username: str
-    given_name: str
-    family_name: str
-    middle_name: str
-    email: str
-    tenant_name: str
-
 class MagisterSession:
+    # user stuff
+    user: EUser
+    
     # api stuff
-    tenant: str
-    username: str
     access_token: str
     session_id: int
     person_id: int
     
     # cached info
     __authenticated: bool
-    __userinfo: UserInfo
     
-    def __init__(self):
-        self.tenant = None
-        self.username = None
+    def __init__(self, user: EUser):
+        self.user = user
+        
         self.access_token = None
         self.session_id = None
         self.person_id = None
+
         self.__authenticated = False
+        self.__userinfo = None
+        
+    def __bool__(self):
+        return self.__authenticated
 
     def __assert_authenticated(self, name):
         if not self.__authenticated:
             raise Exception(f"not authenticated ({name})")
     
-    def authenticate(self, school, username, passwd):
-        auth = authenticate(school, username, passwd)
-        if not auth: return False
+    def authenticate(self):
+        auth = authenticate(
+            self.user.tenant,
+            self.user.username,
+            self.user.password_text)
+        if not auth: return
         
         self.__authenticated = True
-        self.tenant = auth["tenant"]
-        self.username = auth["username"]
         self.access_token = auth["access_token"]
         self.session_id = auth["session_id"]
         self.person_id = auth["person_id"]
     
-    def get_userinfo(self):
-        self.__assert_authenticated("get_userinfo")
+    def update_userinfo(self):
+        self.__assert_authenticated("update_userinfo")
 
-        if not self.__userinfo:
-            self.__userinfo = get(
-                self.tenant, self.access_token,
-                "https://accounts.magister.net/connect/userinfo",
-            ).json()
+        logging.info("retreiving user info")
+        data = get(
+            self.user.tenant, self.access_token,
+            "https://accounts.magister.net/connect/userinfo",
+        ).json()
         
-        return self.__userinfo
+        # data["preferred_username"]
+        self.user.first_name = data["given_name"]
+        self.user.last_name = data["family_name"]
+        self.user.middle_name = data["middle_name"]
+        self.user.school = data["tenant_name"]
+        self.user.save()
+
+        logging.debug(f"  first name: {self.user.first_name}")
+        logging.debug(f"  middle name: {self.user.middle_name}")
+        logging.debug(f"  last name: {self.user.last_name}")
+        logging.debug(f"  school: {self.user.school}")

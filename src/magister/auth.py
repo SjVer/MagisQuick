@@ -44,81 +44,54 @@ def get_person_id(tenant, access_token):
     # return int(r.json()["items"][0]["persoonId"])
     return -1
 
-def find_response(hiturl, name, responses):
-    for url in responses:
-        if hiturl in url:
-            return url
-            
-    raise Exception(f"could not find authentication {name} response")
-
-def try_authenticate(school, username, passwd):
-    logging.info(f"attempting magister authentication")
+def try_authenticate(tenant, username, passwd):
     driver = setup_driver()
 
-    driver.get(f"https://accounts.magister.net")
-    logging.debug(f"retreiving accounts.magister.net")
+    driver.get(f"https://{tenant}.magister.net")
+    logging.debug(f"  retreiving {tenant}.magister.net")
 
     # enter credentials
     old_url = driver.current_url
-    enter_credentails(driver, school, username, passwd)
+    enter_credentails(driver, username, passwd)
     
-    # wait for redirect
-    logging.debug("waiting for redirect")
-    WebDriverWait(driver, 5).until(EC.url_changes(old_url))
-    driver.implicitly_wait(0.5)
-
-    responses = [
-        request.response.headers["location"] for request in
-        list(filter(
-            lambda r: r.response and r.response.headers["location"],
-            driver.requests
-        ))
-    ]
-    driver.quit()
-
-    # find callback response and extract access token
-    response_url = find_response(
-        "https://accounts.magister.net/profile/oidc/redirect_callback",
-        "redirect callback", responses
+    # wait for callback
+    logging.debug("  waiting for callback")
+    callback = driver.wait_for_request(
+        "https://accounts.magister.net/connect/authorize/callback",
+        5
     )
-    access_token = response_url.split("access_token=", 1)[1].split("&", 1)[0]
-    logging.debug(f"received token: {access_token[:10]}...")
+    driver.quit()
+    
+    # extract access token
+    location = callback.response.headers["location"]
+    access_token = location.split("access_token=", 1)[1].split("&", 1)[0]
+    logging.debug(f"  received access token: {access_token[:10]}...")
 
     # find login response and extract session id
-    response_url = find_response("/account/login", "login", responses)
-    session_id = response_url.split("sessionId=", 1)[1].split("&", 1)[0]
-    logging.debug(f"received session id: {session_id[:10]}...")
+    # response_url = find_response("/account/login", "login", responses)
+    # session_id = response_url.split("sessionId=", 1)[1].split("&", 1)[0]
+    session_id = "-------------------"
+    logging.debug(f"  received session id: {session_id[:10]}...")
 
-    # get tenant and person id
-    tenant = get_tenant(access_token)
-    logging.debug(f"received tenant: {tenant}")
-
+    # get person id
     person_id = get_person_id(tenant, access_token)
-    logging.debug(f"received person id: {person_id}")
-    
-    # pprint(
-    #     # retreives list of school names
-    #     requests.get(
-    #         f"https://accounts.magister.net/challenges/tenant/search?key=CSG",
-    #         headers=header(None, None)
-    #     ).content
-    # )
+    logging.debug(f"  received person id: {person_id}")
     
     logging.info("authentication complete")
     return {
-        "tenant": tenant,
-        "username": username,
         "access_token": access_token,
         "session_id": session_id,
         "person_id": person_id
     }
 
-def authenticate(school, username, passwd):
-    for _ in range(2):
+def authenticate(tenant, username, passwd):
+    attempts = 1
+    for a in range(attempts):
         try:
-            return try_authenticate(school, username, passwd)
+            logging.info(f"attempting magister authentication ({a+1}/{attempts})")
+            return try_authenticate(tenant, username, passwd)
         except Exception as e:
-            logging.error(f"failed to authenticate! (school: {school}, username: {username})")
+            logging.error(f"failed to authenticate! (tenant: {tenant}, username: {username})")
             logging.error(f"{getattr(e, 'message', e)}")
             continue
-    logging.error("too many retries")
+    logging.error(f"too many retries ({attempts}/{attempts})")
