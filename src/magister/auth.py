@@ -1,4 +1,5 @@
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from seleniumwire import webdriver
@@ -6,8 +7,6 @@ from seleniumwire import webdriver
 import os
 
 from .. import logging
-from .requests import get
-from .ui import enter_credentails
 
 def setup_driver():
     chrome_options = Options()
@@ -25,24 +24,25 @@ def setup_driver():
         executable_path=chrome_driver
     )
 
-def get_tenant(access_token):
-    r = get(
-        None, access_token,
-        "https://magister.net/.well-known/host-meta.json",
-    )
-    href = r.json()["links"][0]["href"]
-    return href.lstrip("https://").split(".")[0]
+def wait_for_element(driver, id):
+    locator = lambda d: d.find_element(value=id)
+    return WebDriverWait(driver, 5).until(locator)
 
-def get_person_id(tenant, access_token):
-    # r = get(
-    #     tenant, access_token,
-    #     "https://accounts.magister.net/connect/userinfo",
-    # )
+def enter_credentails(driver, username, passwd):
+    # enter username
+    elem = wait_for_element(driver, "username")
+    logging.debug(f"  entering username ({username})")
+    elem.clear()
+    elem.send_keys(username)
+    elem.send_keys(Keys.RETURN)
 
-    # print(r.text)
+    # enter password
+    elem = wait_for_element(driver, "rswp_password")
+    logging.debug("  entering password")
+    elem.clear()
+    elem.send_keys(passwd)
+    elem.send_keys(Keys.RETURN)
 
-    # return int(r.json()["items"][0]["persoonId"])
-    return -1
 
 def try_authenticate(tenant, username, passwd):
     driver = setup_driver()
@@ -51,7 +51,6 @@ def try_authenticate(tenant, username, passwd):
     logging.debug(f"  retreiving {tenant}.magister.net")
 
     # enter credentials
-    old_url = driver.current_url
     enter_credentails(driver, username, passwd)
     
     # wait for callback
@@ -67,25 +66,10 @@ def try_authenticate(tenant, username, passwd):
     access_token = location.split("access_token=", 1)[1].split("&", 1)[0]
     logging.debug(f"  received access token: {access_token[:10]}...")
 
-    # find login response and extract session id
-    # response_url = find_response("/account/login", "login", responses)
-    # session_id = response_url.split("sessionId=", 1)[1].split("&", 1)[0]
-    session_id = "-------------------"
-    logging.debug(f"  received session id: {session_id[:10]}...")
-
-    # get person id
-    person_id = get_person_id(tenant, access_token)
-    logging.debug(f"  received person id: {person_id}")
-    
-    logging.info("authentication complete")
-    return {
-        "access_token": access_token,
-        "session_id": session_id,
-        "person_id": person_id
-    }
+    return access_token
 
 def authenticate(tenant, username, passwd):
-    attempts = 1
+    attempts = 3
     for a in range(attempts):
         try:
             logging.info(f"attempting magister authentication ({a+1}/{attempts})")

@@ -5,10 +5,14 @@ from django.utils.translation import gettext_lazy as _
 from .manager import EUserManager
 
 class EUser(AbstractUser):
+    # account_id is for /api/accounts
+    # student_id is for /api/leerlingen
+    account_id: str = models.TextField(_("account_id"))
+    student_id: str = models.TextField(_("student_id"))
     middle_name: str = models.TextField(_("middle_name"))
-    password_text: str = models.TextField(_("password_text"))
     tenant: str = models.TextField(_("tenant"))
     school: str = models.TextField(_("school"))
+    password_text: str = models.TextField(_("password_text"))
     
     REQUIRED_FIELDS = ["tenant", "password"]
 
