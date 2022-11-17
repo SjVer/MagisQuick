@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from .views.root import root_view
-from .views.login import login_view
+# from .views.login import login_view
 from .views.profile import profile_view
 from .views.boeken import boeken_view
 
@@ -33,10 +33,10 @@ urlpatterns = [
     #   accounts/password_reset/done/ [name='password_reset_done']
     #   accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
     #   accounts/reset/done/ [name='password_reset_complete']
-    # path('accounts/', include("django.contrib.auth.urls")),
+    path('accounts/', include("django.contrib.auth.urls")),
     
     path('', root_view),
-    path('login/', login_view),
+    # path('login/', login_view),
     path('profile/', profile_view),
     path('boeken/', boeken_view),
 ]

@@ -19,7 +19,7 @@ class EUser(AbstractUser):
     objects = EUserManager()
 
     def __str__(self):
-        return f"{self.username}@{self.tenant}"
+        return f"{self.username}-{self.tenant}"
     
     def get_full_name(self):
         fname = " " + self.first_name if self.first_name else ""

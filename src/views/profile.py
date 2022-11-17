@@ -1,18 +1,16 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest
 
-from .error import render_error
-from .. import magister
+from ..magister import get_session
 
 @login_required
-def profile_view(request):
-	session = magister.MagisterSession(request.user)
-	session.authenticate()
-
-	if not session: return render_error(request, "auth failed")
-
-	session.update_userinfo()
+def profile_view(request: HttpRequest):
+	session = get_session(request)
+	session.require_credentials()
+	session.require_userinfo()
+	
 	return render(request, "profile.html", {
-        "user": session.user,
+		"user": session.user,
 		"full_name": session.user.get_full_name()
 	})
