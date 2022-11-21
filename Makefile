@@ -16,3 +16,6 @@ freeze:
 serve:
 	clear -x
 	python manage.py runserver
+
+browser:
+	sqlitebrowser db.sqlite3 &

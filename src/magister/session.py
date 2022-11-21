@@ -39,17 +39,35 @@ class MagisterSession:
 	
 	# authenticate with Magister and get an access token
 	def authenticate(self):
-		# authenticate
-		access_token = authenticate(
-			self.user.tenant,
-			self.user.username,
-			self.user.password_text
-		)
-		if not access_token:
-			self.__authenticated = False
-			return
+		# try restoring last session
+		if self.user.last_access_token:
+			logging.info("attempting to restore session")
+			logging.debug(f"  old access token: {self.user.last_access_token[:10]}...")
 
-		self.access_token = access_token
+			status_code = get(
+				self.user.tenant, self.user.last_access_token,
+				f"https://{self.user.tenant}.magister.net/api/sessions/current"
+			).status_code
+
+			if status_code == 200:
+				# code 200 means success
+				self.access_token = self.user.last_access_token
+
+		if not self.access_token:
+			# restoring fialed, so full authentication
+			self.access_token = authenticate(
+				self.user.tenant,
+				self.user.username,
+				self.user.password_text
+			)
+
+			if not self.access_token:
+				self.__authenticated = False
+				return
+
+			self.user.last_access_token = self.access_token
+			self.user.save()
+
 		self.__authenticated = True
 		logging.info(f"session authenticated")
 

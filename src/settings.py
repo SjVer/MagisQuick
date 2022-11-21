@@ -129,7 +129,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Other settings
 
-AUTH_USER_MODEL = 'user.EUser'
+AUTH_USER_MODEL = "user.EUser"
+
+APPNAME = "AppName"
 
 LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "/boeken"

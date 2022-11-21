@@ -1,3 +1,4 @@
-import os
+from django.conf import settings
 
-os.system("clear")
+if settings.DEBUG:
+    __import__("os").system("clear")

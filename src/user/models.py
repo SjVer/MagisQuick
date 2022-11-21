@@ -9,10 +9,11 @@ class EUser(AbstractUser):
     # student_id is for /api/leerlingen
     account_id: str = models.TextField(_("account_id"))
     student_id: str = models.TextField(_("student_id"))
-    middle_name: str = models.TextField(_("middle_name"))
     tenant: str = models.TextField(_("tenant"))
     school: str = models.TextField(_("school"))
+    middle_name: str = models.TextField(_("middle_name"))
     password_text: str = models.TextField(_("password_text"))
+    last_access_token: str = models.TextField(_("last_access_token"))
     
     REQUIRED_FIELDS = ["tenant", "password"]
 

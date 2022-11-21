@@ -64,7 +64,7 @@ def try_authenticate(tenant, username, passwd):
     # extract access token
     location = callback.response.headers["location"]
     access_token = location.split("access_token=", 1)[1].split("&", 1)[0]
-    logging.debug(f"  received access token: {access_token[:10]}...")
+    logging.debug(f"  access token: {access_token[:10]}...")
 
     return access_token
 
@@ -79,3 +79,4 @@ def authenticate(tenant, username, passwd):
             logging.error(f"{getattr(e, 'message', e)}")
             continue
     logging.error(f"too many retries ({attempts}/{attempts})")
+

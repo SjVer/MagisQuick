@@ -1,0 +1,31 @@
+<!-- requires variables `settings` and `title` -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <icon>{{settings.ICON_PATH}}</icon>
+    <title>{{title}} - {{settings.APPNAME}}</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<script>
+    function show_content(content) {
+        $("#content").append(content);
+        $("#content").attr("hidden", false);
+        $("#loading_content").remove();
+    }
+</script>
+
+<body>
+    <div id="loading_content">
+        Loading...
+    </div>
+
+    <div id="content" hidden="true">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
