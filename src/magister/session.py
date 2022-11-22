@@ -1,7 +1,7 @@
 from typing import TypedDict, List
 from datetime import datetime as dt
 
-from .. import logging
+from .. import log
 from ..user.models import EUser
 from .requests import get
 from .auth import authenticate
@@ -41,8 +41,8 @@ class MagisterSession:
 	def authenticate(self):
 		# try restoring last session
 		if self.user.last_access_token:
-			logging.info("attempting to restore session")
-			logging.debug(f"  old access token: {self.user.last_access_token[:10]}...")
+			log.info("attempting to restore session")
+			log.debug(f"  old access token: {self.user.last_access_token[:10]}...")
 
 			status_code = get(
 				self.user.tenant, self.user.last_access_token,
@@ -52,6 +52,8 @@ class MagisterSession:
 			if status_code == 200:
 				# code 200 means success
 				self.access_token = self.user.last_access_token
+			else:
+				log.debug("  could not restore session")
 
 		if not self.access_token:
 			# restoring fialed, so full authentication
@@ -69,12 +71,12 @@ class MagisterSession:
 			self.user.save()
 
 		self.__authenticated = True
-		logging.info(f"session authenticated")
+		log.info(f"session authenticated")
 
 	# update ID's and email address
 	def update_credentails(self):
 		self.__assert_authenticated("update_credentials")
-		logging.info("updating credentials")
+		log.info("updating credentials")
 		
 		# retreive session id and account id
 		data = get(
@@ -98,10 +100,10 @@ class MagisterSession:
 
 		self.user.save()
 
-		logging.debug(f"  session id: {self.session_id}")
-		logging.debug(f"  account id: {self.user.account_id}")
-		logging.debug(f"  student id: {self.user.student_id}")
-		logging.debug(f"  email : {self.user.email}")
+		log.debug(f"  session id: {self.session_id}")
+		log.debug(f"  account id: {self.user.account_id}")
+		log.debug(f"  student id: {self.user.student_id}")
+		log.debug(f"  email : {self.user.email}")
 	
 	def require_credentials(self):
 		if self.session_id: return
@@ -110,7 +112,7 @@ class MagisterSession:
 	# update user information
 	def update_userinfo(self):
 		self.__assert_authenticated("update_userinfo")
-		logging.info("updating user info")
+		log.info("updating user info")
 
 		userinfo = get(
 			self.user.tenant, self.access_token,
@@ -123,10 +125,10 @@ class MagisterSession:
 		self.user.school = userinfo["tenant_name"]
 		self.user.save()
 
-		logging.debug(f"  first name: {self.user.first_name}")
-		logging.debug(f"  middle name: {self.user.middle_name}")
-		logging.debug(f"  last name: {self.user.last_name}")
-		logging.debug(f"  school: {self.user.school}")
+		log.debug(f"  first name: {self.user.first_name}")
+		log.debug(f"  middle name: {self.user.middle_name}")
+		log.debug(f"  last name: {self.user.last_name}")
+		log.debug(f"  school: {self.user.school}")
 		
 	def require_userinfo(self):
 		if self.user.first_name: return
@@ -145,7 +147,7 @@ class MagisterSession:
 	def get_appointments(self, start: dt, end: dt):
 		start = start.strftime("%Y-%m-%d")
 		end = end.strftime("%Y-%m-%d")
-		logging.info(f"getting appointments from {start} to {end}")
+		log.info(f"getting appointments from {start} to {end}")
 
 		class Data(TypedDict):
 			Aantekeningen: dict # ?

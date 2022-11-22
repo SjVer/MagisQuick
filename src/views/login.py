@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 from ..magister import clear_session
 from ..user.models import EUser
-from .. import logging
+from .. import log
 
 # class LoginForm(AuthenticationForm):
 #     pass
@@ -22,10 +22,10 @@ from .. import logging
     
 @receiver(user_logged_in)
 def user_logged_in_callback(user: EUser, **kwargs):    
-    logging.info(f"user {user} logged in")
+    log.info(f"user {user} logged in")
 
 @receiver(user_logged_out)
 def user_logged_out_callback(user: EUser, **kwargs): 
-    logging.info(f"user {user} logged out")
+    log.info(f"user {user} logged out")
     clear_session()
     

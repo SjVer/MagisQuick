@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script>
+    $.ajax({
+        url: window.location.href,
+        type: "GET",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("ViaLoadingPage", 1);
+        },
+        success: function(data) {
+            console.log(data);
+            $("body").html(data);
+        },
+        error: function() {
+            window.location.pathname = "error";
+        }
+    })
+</script>
+
+Loading...
+
+{% endblock %}

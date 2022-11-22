@@ -3,15 +3,20 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.conf import settings
 
+from time import sleep
+
 from ..magister import get_session
+from . import via_loading_page
 
 @login_required
-def profile_view(request: HttpRequest):
+@via_loading_page("Account")
+def account_view(request: HttpRequest):
+	sleep(5)
 	session = get_session(request)
 	session.require_credentials()
 	session.require_userinfo()
 	
-	return render(request, "views/profile.html", {
+	return render(request, "views/account.html", {
 		"settings": settings,
 		"title": "Account",
 		"user": session.user,
