@@ -1,6 +1,36 @@
 <!-- requires variables `settings` and `title` -->
 
-<icon>{{settings.ICON_PATH}}</icon>
+<!-- fonts -->
+<link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
+
+<style>
+
+:root {
+    --normal-font-family: tahoma, sans-serif;
+    --title-font-family: arboria, sans-serif;
+    
+    --normal-color: rgb(51, 51, 51);
+    --title-color: rgb(31, 151, 249);
+    --highlight-color: rgb(255, 130, 5);
+}
+    
+body {
+    font-family: var(--normal-font-family);
+    color: var(--normal-color);
+}
+
+h1 {
+    color: var(--title-color);
+    font-family: var(--title-font-family);
+}
+h1::after {
+    color: var(--highlight-color);
+    content: ".";
+}
+
+</style>
+
+<!-- <icon>{{settings.ICON_PATH}}</icon> -->
 <title>{{title}} - {{settings.APPNAME}}</title>
 
 {% block content %}{% endblock %}

@@ -8,8 +8,8 @@ def __get_content(url):
         log.error(f"failed to get webfont: {e.args[0]}")
         return None
 
-def get_loading_gif(tenant: str):
-    return __get_content(f"https://{tenant}.magister.net/magister/assets/fonts/loader-m-blue-short.svg")
-
 def get_webfont(tenant: str):
     return __get_content(f"https://{tenant}.magister.net/magister/assets/fonts/magistersymbols-webfont.woff")
+
+def loading_gif_url(tenant: str):
+    return f"https://{tenant}.magister.net/magister/assets/fonts/loader-m-blue-short.svg"

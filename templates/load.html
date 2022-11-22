@@ -20,6 +20,23 @@
     })
 </script>
 
-Loading...
+<style>
+    .loading_gif_div{
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+
+    .loading_gif{
+        width: 10%;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+      }
+</style>
+
+<div class="loading_gif_div">
+    <img class="loading_gif" src="{{loading_gif_url}}" alt="Laden...">
+</div>
 
 {% endblock %}
