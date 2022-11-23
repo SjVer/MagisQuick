@@ -3,13 +3,13 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.conf import settings
 
-from . import via_loading_page
-from ..magister import get_session
-from .. import figure_out
+from .. import via_loading_page
+from ...magister import get_session
+from ... import figure_out
 
 @login_required
 @via_loading_page("Boeken")
-def boeken_view(request: HttpRequest):
+def boeken_page(request: HttpRequest):
 	session = get_session(request)
 	session.require_userinfo()
 

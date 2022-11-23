@@ -17,27 +17,25 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views.root import root_view
-# from .views.login import login_view
-from .views.account import account_view
-from .views.boeken import boeken_view
+from .front import root_page
+from .front.views.account import account_page
+from .front.views.boeken import boeken_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
     # included views:
-    #   accounts/login/ [name='login']
-    #   accounts/logout/ [name='logout']
-    #   accounts/password_change/ [name='password_change']
-    #   accounts/password_change/done/ [name='password_change_done']
-    #   accounts/password_reset/ [name='password_reset']
-    #   accounts/password_reset/done/ [name='password_reset_done']
-    #   accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
-    #   accounts/reset/done/ [name='password_reset_complete']
-    path('accounts/', include("django.contrib.auth.urls")),
-    
-    path('', root_view),
-    # path('login/', login_view),
-    path('account/', account_view),
-    path('boeken/', boeken_view),
+    #   login/ [name='login']
+    #   logout/ [name='logout']
+    #   password_change/ [name='password_change']
+    #   password_change/done/ [name='password_change_done']
+    #   password_reset/ [name='password_reset']
+    #   password_reset/done/ [name='password_reset_done']
+    #   reset/<uidb64>/<token>/ [name='password_reset_confirm']
+    #   reset/done/ [name='password_reset_complete']
+    path('', include("django.contrib.auth.urls")),
+
+    path('', root_page),
+    path('account/', account_page),
+    path('boeken/', boeken_page),
 ]

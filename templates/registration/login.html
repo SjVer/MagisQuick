@@ -1,6 +1,68 @@
-<h2>Log In</h2>
+<title>Aanmelden</title>
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  body {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  input, input:focus, input:focus-visible, input:focus-within {
+    width: 100%;;
+    background-color: transparent;
+    font-family: var(--normal-font-family);
+    line-height: 1.5rem;
+    box-sizing: border-box;
+    display: block;
+  }
+
+  #submit {
+    font-family: var(--normal-font-family) !important;
+    box-sizing: border-box;
+    appearance: none;
+    border: none;
+    margin: 0;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    flex-shrink: 0;
+    line-height: 1rem;
+    position: relative;
+    text-decoration: none;
+    transition: .2s ease-in-out;
+    transition-property: background,box-shadow,color;
+    vertical-align: bottom;
+    outline: none;
+    background: #1f97f9;
+    color: #fff;
+    padding: 1rem;
+    width: 100%;
+  }
+</style>
+
+<h1>Welkom</h1>
+<h2>Vul je inloggegevens in</h2>
+
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
+
+  <input type="text" name="school"
+    autofocus="" autocapitalize="none" maxlength="150"
+    required="" id="id_school" placeholder="Je School"> </br>  
+  {{ form.username }} </br>
+  {{ form.password }} </br>
+  
+  <button type="submit" id="submit">Log In</button>
 </form>
+
+<script>
+  document.getElementById("id_username").placeholder = "Je Gebruikersnaam";
+  document.getElementById("id_password").placeholder = "Je Wachtwoord";
+</script>
+
+{% endblock %}

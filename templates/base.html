@@ -6,26 +6,39 @@
 <style>
 
 :root {
-    --normal-font-family: tahoma, sans-serif;
-    --title-font-family: arboria, sans-serif;
-    
-    --normal-color: rgb(51, 51, 51);
-    --title-color: rgb(31, 151, 249);
-    --highlight-color: rgb(255, 130, 5);
+  --normal-font-family: tahoma, sans-serif;
+  --title-font-family: "Arboria", sans-serif;
+  --subtitle-font-family: open-sans, Arial, Helvetica, sans-serif;
+  
+  --normal-color: rgb(51, 51, 51);
+  --title-color: rgb(31, 151, 249);
+  --subtitle-color: rgb(2, 53, 78);
+  --highlight-color: rgb(255, 130, 5);
 }
-    
+  
 body {
-    font-family: var(--normal-font-family);
-    color: var(--normal-color);
+  font-family: var(--normal-font-family);
+  color: var(--normal-color);
 }
 
 h1 {
-    color: var(--title-color);
-    font-family: var(--title-font-family);
+  color: var(--title-color);
+  font-family: var(--title-font-family);
+  font-size: 36px;
+  font-weight: 700;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
 }
 h1::after {
-    color: var(--highlight-color);
-    content: ".";
+  color: var(--highlight-color);
+  content: ".";
+}
+
+h2 {
+  color: var(--subtitle-color);
+  font-family: var(--subtitle-font-family);
+  font-size: 20px;
+  font-weight: 500;
 }
 
 </style>
