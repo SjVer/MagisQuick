@@ -1,12 +1,6 @@
-from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.shortcuts import render, redirect
-from django.dispatch import receiver
 from django.http import HttpRequest
 from django.conf import settings
-
-from ..magister import clear_session
-from ..user.models import EUser
-from .. import log
 
 def via_loading_page(title: str):
     def decorated(view_fn):
@@ -21,15 +15,6 @@ def via_loading_page(title: str):
         return wrapped
     return decorated
 
-@receiver(user_logged_in)
-def user_logged_in_callback(user: EUser, **kwargs):    
-    log.info(f"user {user} logged in")
-
-@receiver(user_logged_out)
-def user_logged_out_callback(user: EUser, **kwargs): 
-    log.info(f"user {user} logged out")
-    clear_session()
-
 def root_page(request):
     # if logged in: redirect to home page
     if request.user.is_authenticated:
@@ -37,3 +22,13 @@ def root_page(request):
 
     # if not logged in: redirect to login page
     return redirect(settings.LOGIN_URL)
+
+def render_error(request, msg):
+    return render(request, "error.html", {
+        "settings": settings,
+        "title": "Error",
+        "message": msg,
+	})
+
+def error_page(request):
+    return render_error(request, "oeps")

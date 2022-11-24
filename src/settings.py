@@ -129,6 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Other settings
 
+AUTHENTICATION_BACKENDS = [ "src.backends.SchoolAndEmailBackend" ]
+
 AUTH_USER_MODEL = "user.EUser"
 
 APPNAME = "AppName"

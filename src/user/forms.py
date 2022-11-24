@@ -5,10 +5,10 @@ class EUserCreationForm(UserCreationForm):
 
     class Meta:
         model = EUser
-        fields = ('username',)
+        fields = ("username", "school")
 
 class EUserChangeForm(UserChangeForm):
 
     class Meta:
         model = EUser
-        fields = ('username',)
+        fields = ("username", "school")

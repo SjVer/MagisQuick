@@ -40,25 +40,25 @@ class MagisterSession:
 	# authenticate with Magister and get an access token
 	def authenticate(self):
 		# try restoring last session
-		if self.user.last_access_token:
+		if self.user.last_access_token and self.user.tenant:
 			log.info("attempting to restore session")
 			log.debug(f"  old access token: {self.user.last_access_token[:10]}...")
 
 			status_code = get(
 				self.user.tenant, self.user.last_access_token,
-				f"https://{self.user.tenant}.magister.net/api/sessions/current"
+				f"https://accounts.magister.net/connect/userinfo"
 			).status_code
 
 			if status_code == 200:
 				# code 200 means success
 				self.access_token = self.user.last_access_token
 			else:
-				log.debug("  could not restore session")
+				log.debug(f"  could not restore session (code {status_code})")
 
 		if not self.access_token:
 			# restoring fialed, so full authentication
 			self.access_token = authenticate(
-				self.user.tenant,
+				self.user.school,
 				self.user.username,
 				self.user.password_text
 			)
@@ -67,11 +67,18 @@ class MagisterSession:
 				self.__authenticated = False
 				return
 
+			# get tenant (thanks sjoerd :))! )
+			self.user.tenant = get(
+				None, self.access_token,
+				"https://cors.sjoerd.dev/https://magister.net/.well-known/host-meta.json"
+			).json()["links"][0]["href"].strip("https://").split('.', 1)[0]
+			
 			self.user.last_access_token = self.access_token
 			self.user.save()
 
 		self.__authenticated = True
 		log.info(f"session authenticated")
+
 
 	# update ID's and email address
 	def update_credentails(self):
@@ -122,13 +129,11 @@ class MagisterSession:
 		self.user.first_name = userinfo["given_name"]
 		self.user.last_name = userinfo["family_name"]
 		self.user.middle_name = userinfo["middle_name"]
-		self.user.school = userinfo["tenant_name"]
 		self.user.save()
 
 		log.debug(f"  first name: {self.user.first_name}")
 		log.debug(f"  middle name: {self.user.middle_name}")
 		log.debug(f"  last name: {self.user.last_name}")
-		log.debug(f"  school: {self.user.school}")
 		
 	def require_userinfo(self):
 		if self.user.first_name: return
@@ -145,6 +150,8 @@ class MagisterSession:
 		
 	# get appointments
 	def get_appointments(self, start: dt, end: dt):
+		self.__assert_authenticated("get_appointments")
+
 		start = start.strftime("%Y-%m-%d")
 		end = end.strftime("%Y-%m-%d")
 		log.info(f"getting appointments from {start} to {end}")

@@ -3,6 +3,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
 <style>
   body {
     position: absolute;
@@ -45,15 +47,15 @@
   }
 </style>
 
+<datalist id="schools-list"></datalist>
+
 <h1>Welkom</h1>
 <h2>Vul je inloggegevens in</h2>
 
 <form method="post">
   {% csrf_token %}
 
-  <input type="text" name="school"
-    autofocus="" autocapitalize="none" maxlength="150"
-    required="" id="id_school" placeholder="Je School"> </br>  
+  {{ form.school }} </br>
   {{ form.username }} </br>
   {{ form.password }} </br>
   
@@ -61,8 +63,26 @@
 </form>
 
 <script>
-  document.getElementById("id_username").placeholder = "Je Gebruikersnaam";
-  document.getElementById("id_password").placeholder = "Je Wachtwoord";
+  $("#id_school").on("input", () => {
+    query = encodeURI($("#id_school").val());
+
+    $.ajax({
+      url: "../api/search_tenants",
+      method: "GET",
+      data: { "query": query },
+      
+      success: (data) => {
+        let list = document.getElementById("schools-list");
+        list.innerHTML = "";
+
+        for(school in data) {
+          list.appendChild(
+            new Option(value = data[school])
+          )
+        }
+      },
+    })
+  });
 </script>
 
 {% endblock %}

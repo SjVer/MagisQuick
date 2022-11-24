@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from seleniumwire import webdriver
@@ -27,7 +29,20 @@ def wait_for_element(driver, id):
     locator = lambda d: d.find_element(value=id)
     return WebDriverWait(driver, 5).until(locator)
 
-def enter_credentails(driver, username, passwd):
+def enter_credentails(driver, school, username, passwd):
+    # enter school
+    elem = wait_for_element(driver, "scholenkiezer_value")
+    log.debug(f"  entering school ({school})")
+    elem.clear()
+    elem.send_keys(school)
+    WebDriverWait(driver, 10).until(
+        EC.text_to_be_present_in_element_attribute(
+            (By.CLASS_NAME, "input-drop-down-list-item"),
+            "innerText", school
+        )
+    )
+    elem.send_keys(Keys.RETURN)
+
     # enter username
     elem = wait_for_element(driver, "username")
     log.debug(f"  entering username ({username})")
@@ -42,22 +57,55 @@ def enter_credentails(driver, username, passwd):
     elem.send_keys(passwd)
     elem.send_keys(Keys.RETURN)
 
+# def navigate_account_page(driver: webdriver.Chrome):
+    # # wait for account page
+    # log.debug("  waiting for account page to load")
+    # elem = WebDriverWait(driver, 10).until(
+    #     EC.element_to_be_clickable(
+    #         (By.XPATH, "/html/body/mip-root/div/dna-avatar")
+    #     )
+    # )
+    #
+    # # click profile menu thing
+    # elem.click()
+    #
+    # # click "open magister web"
+    # elem = WebDriverWait(driver, 10).until(
+    #     EC.element_to_be_clickable(
+    #         (By.XPATH, "/html/body/div/div/div/dna-popover/div/div[2]/mip-user-menu/div/div[2]")
+    #     )
+    # )
+    # elem.click()
+    #
+    # # wait for newly opened tab
+    # old_url = driver.current_url
+    # log.debug("  waiting for magister web")
+    # WebDriverWait(driver, 10).until(EC.url_changes(old_url))
+    #
+    # for r in driver.requests:
+    #     print(r.url, end="\n\n\n")
 
-def try_authenticate(tenant, username, passwd):
+def try_authenticate(school, username, passwd):
     driver = setup_driver()
 
-    driver.get(f"https://{tenant}.magister.net")
-    log.debug(f"  retreiving {tenant}.magister.net")
+    # driver.get(f"https://{school}.magister.net")
+    # log.debug(f"  retreiving {school}.magister.net")
+    driver.get(f"https://accounts.magister.net")
+    log.debug(f"  retreiving accounts.magister.net")
 
     # enter credentials
-    enter_credentails(driver, username, passwd)
+    enter_credentails(driver, school, username, passwd)
     
     # wait for callback
-    log.debug("  waiting for callback")
+    log.debug("  waiting for authorization callback")
     callback = driver.wait_for_request(
         "https://accounts.magister.net/connect/authorize/callback",
-        5
+        10
     )
+
+    # # this is shit but we need the tenant :(
+    # navigate_account_page(driver)
+    # print(driver.url)
     driver.quit()
     
     # extract access token
@@ -67,14 +115,14 @@ def try_authenticate(tenant, username, passwd):
 
     return access_token
 
-def authenticate(tenant, username, passwd):
+def authenticate(school, username, passwd):
     attempts = 3
     for a in range(attempts):
         try:
             log.info(f"attempting magister authentication ({a+1}/{attempts})")
-            return try_authenticate(tenant, username, passwd)
+            return try_authenticate(school, username, passwd)
         except Exception as e:
-            log.error(f"failed to authenticate! (tenant: {tenant}, username: {username})")
+            log.error(f"failed to authenticate! (tenant: {school}, username: {username})")
             log.error(f"{getattr(e, 'message', e)}")
             continue
     log.error(f"too many retries ({attempts}/{attempts})")

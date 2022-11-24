@@ -12,7 +12,8 @@ def get_header(tenant, access_token):
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Dest": "empty",
         "Accept-Encoding": "gzip, deflate",
-        "Accept-Language": "en-US,en;q=0.9"
+        "Accept-Language": "en-US,en;q=0.9",
+        "Origin": "https://accounts.magister.net"
     }
 
     if tenant: header["Referer"] = f"https://{tenant}.magister.net/magister/"
