@@ -22,11 +22,10 @@ def get_header(tenant, access_token):
     return header
 
 def get(tenant, access_token, url):
-    try:
-        return requests.get(
-            url,
-            headers=get_header(tenant, access_token),
-            timeout=5
-        )
-    except requests.ConnectionError:
-        return None
+    r = requests.get(
+        url,
+        headers=get_header(tenant, access_token),
+        timeout=5
+    )
+    r.raise_for_status()
+    return r

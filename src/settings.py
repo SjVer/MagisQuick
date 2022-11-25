@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-m54!97!ft^2^9fnw2o=l!e$@^_rrhdihz+4(%((-9gsrwxxhc1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -140,3 +140,5 @@ LOGIN_REDIRECT_URL = "/boeken"
 
 LOGOUT_URL = "/logout"
 LOGOUT_REDIRECT_URL = "/"
+
+CSRF_FAILURE_VIEW = "src.front.error_page"

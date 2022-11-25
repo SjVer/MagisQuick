@@ -6,14 +6,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
 <style>
-  body {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
-
   input, input:focus, input:focus-visible, input:focus-within {
     width: 100%;;
     background-color: transparent;
@@ -22,45 +14,24 @@
     box-sizing: border-box;
     display: block;
   }
-
-  #submit {
-    font-family: var(--normal-font-family) !important;
-    box-sizing: border-box;
-    appearance: none;
-    border: none;
-    margin: 0;
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-block;
-    flex-shrink: 0;
-    line-height: 1rem;
-    position: relative;
-    text-decoration: none;
-    transition: .2s ease-in-out;
-    transition-property: background,box-shadow,color;
-    vertical-align: bottom;
-    outline: none;
-    background: #1f97f9;
-    color: #fff;
-    padding: 1rem;
-    width: 100%;
-  }
 </style>
 
 <datalist id="schools-list"></datalist>
 
-<h1>Welkom</h1>
-<h2>Vul je inloggegevens in</h2>
-
-<form method="post">
-  {% csrf_token %}
-
-  {{ form.school }} </br>
-  {{ form.username }} </br>
-  {{ form.password }} </br>
+<div class="centered">
+  <h1>Welkom</h1>
+  <h2>Vul je inloggegevens in</h2>
   
-  <button type="submit" id="submit">Log In</button>
-</form>
+  <form method="post">
+    {% csrf_token %}
+  
+    {{ form.school }} </br>
+    {{ form.username }} </br>
+    {{ form.password }} </br>
+    
+    <button type="submit" class="big_button">Log In</button>
+  </form>
+</div>
 
 <script>
   $("#id_school").on("input", () => {
