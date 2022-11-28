@@ -49,6 +49,7 @@ def with_error_message(message: str):
                 log.error(f"an exception occurred: {name}")
 
                 if settings.DEBUG:
+                    print(e)
                     try: print_tb(e)
                     except: pass
                     

@@ -1,7 +1,8 @@
 src/__pycache__/
 src/user/__pycache__/
-src/views/__pycache__/
 src/magister/__pycache__/
+src/front/__pycache__
+src/front/views/__pycache__
 db.sqlite3
 
 venv/

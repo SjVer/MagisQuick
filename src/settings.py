@@ -133,7 +133,7 @@ AUTHENTICATION_BACKENDS = [ "src.backends.SchoolAndEmailBackend" ]
 
 AUTH_USER_MODEL = "user.EUser"
 
-APPNAME = "AppName"
+APPNAME = "MagisQuick"
 
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/boeken"

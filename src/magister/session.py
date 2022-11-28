@@ -40,22 +40,22 @@ class MagisterSession:
 	# authenticate with Magister and get an access token
 	def authenticate(self):
 		# try restoring last session
-		if self.user.last_access_token and self.user.tenant:
+		try:
 			log.info("attempting to restore session")
 			log.debug(f"  old access token: {self.user.last_access_token[:10]}...")
 
-			status_code = get(
+			# if this request fails it means that the token doesn't work
+			# we have no use for the retreived data
+			get(
 				self.user.tenant, self.user.last_access_token,
 				f"https://accounts.magister.net/connect/userinfo"
-			).status_code
+			)
 
-			if status_code == 200:
-				# code 200 means success
-				self.access_token = self.user.last_access_token
-			else:
-				log.debug(f"  could not restore session (code {status_code})")
+			self.access_token = self.user.last_access_token
 
-		if not self.access_token:
+		except Exception as e:
+			log.debug(f"  could not restore session (exception {e.__class__.__name__})")
+
 			# restoring fialed, so full authentication
 			self.access_token = authenticate(
 				self.user.school,
@@ -76,14 +76,21 @@ class MagisterSession:
 			self.user.last_access_token = self.access_token
 			self.user.save()
 
-		self.__authenticated = True
-		log.info(f"session authenticated")
-
+		if self.access_token:
+			self.__authenticated = True
+			log.info(f"session authenticated (tenant: {self.user.tenant})")
 
 	# update ID's and email address
 	def update_credentails(self):
 		self.__assert_authenticated("update_credentials")
 		log.info("updating credentials")
+
+		__import__("pprint").pprint(
+			get(
+				self.user.tenant, self.access_token,
+				f"https://dewillem.magister.net/api/account"
+			)
+		)
 		
 		# retreive session id and account id
 		data = get(
@@ -93,14 +100,15 @@ class MagisterSession:
 		
 		self.session_id = data["id"]
 		account_link = data["links"]["account"]["href"]
-		self.user.account_id = account_link.split("/")[-1]
+		# self.user.account_id = account_link.split("/")[-1]
 
 		# retreive email and student id
 		data = get(
 			self.user.tenant, self.access_token,
-			f"https://{self.user.tenant}.magister.net/api/accounts/{self.user.account_id}",
+			f"https://{self.user.tenant}.magister.net/{account_link}",
 		).json()
 		
+		self.user.account_id = data["id"]
 		self.user.email = data["emailadres"]
 		student_link = data["links"]["leerling"]["href"]
 		self.user.student_id = student_link.split("/")[-1]
@@ -113,8 +121,12 @@ class MagisterSession:
 		log.debug(f"  email : {self.user.email}")
 	
 	def require_credentials(self):
-		if self.session_id: return
-		else: self.update_credentails()
+		if None or "" in [
+			# self.session_id,
+			self.user.account_id,
+			self.user.email,
+			self.user.student_id
+		]: self.update_credentails()
 	
 	# update user information
 	def update_userinfo(self):
@@ -136,8 +148,11 @@ class MagisterSession:
 		log.debug(f"  last name: {self.user.last_name}")
 		
 	def require_userinfo(self):
-		if self.user.first_name: return
-		else: self.update_userinfo()
+		if None or "" in [
+			# self.session_id,
+			self.user.first_name,
+			self.user.last_name,
+		]: self.update_userinfo()
 	
 	# {tenant}.magister.net/api/personen/{id}
 	def account_api_url(self):
@@ -154,6 +169,9 @@ class MagisterSession:
 
 		start = start.strftime("%Y-%m-%d")
 		end = end.strftime("%Y-%m-%d")
+
+		end = "2022-12-04"
+		start = "2022-11-27"
 		log.info(f"getting appointments from {start} to {end}")
 
 		class Data(TypedDict):
@@ -173,7 +191,7 @@ class MagisterSession:
 
 		data: List[Data] = get(
 			self.user.tenant, self.access_token,
-			self.account_api_url() + f"afspraken?van={start}&tot={end}"
+			self.account_api_url() + f"afspraken?status=1&tot={end}&van={start}"
 		).json()["Items"]
   
 		return data 

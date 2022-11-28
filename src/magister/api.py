@@ -1,5 +1,7 @@
-from django.http import JsonResponse, HttpRequest
+from django.http import JsonResponse, HttpRequest, HttpResponseRedirect
 from requests import get, Session
+from os import system
+
 from .. import log
 
 __magister_cookies: str = None
@@ -28,5 +30,6 @@ def search_tenants(request: HttpRequest):
     ]
     return JsonResponse(schools, safe=False)
 
-def tenant_from_school(tenant_id: str) -> str:
-    pass
+def clear(request: HttpRequest):
+    system("clear")
+    return HttpResponseRedirect("/")

@@ -40,6 +40,7 @@ urlpatterns = [
     path("logout/", logout_page),
 
     path("api/search_tenants", api.search_tenants),
+    path("api/clear", api.clear),
     path("error/", error_page),
 
     path("", root_page),
