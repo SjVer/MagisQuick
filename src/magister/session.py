@@ -4,7 +4,7 @@ from datetime import datetime as dt
 from .. import log
 from ..user.models import EUser
 from .requests import get
-from .auth import authenticate
+from .auth import refresh, authenticate, TokenSet
 
 __all__ = [
 	"UserInfo",
@@ -16,7 +16,7 @@ class MagisterSession:
 	user: EUser
 	
 	# api stuff
-	access_token: str
+	tokenset: TokenSet
 	session_id: int
 	
 	# cached info
@@ -25,7 +25,7 @@ class MagisterSession:
 	def __init__(self, user: EUser):
 		self.user = user
 		
-		self.access_token = None
+		self.tokenset = None
 		self.session_id = None
 
 		self.__authenticated = False
@@ -39,44 +39,40 @@ class MagisterSession:
 	
 	# authenticate with Magister and get an access token
 	def authenticate(self):
-		# try restoring last session
+		# try refreshing tokens
 		try:
-			log.info("attempting to restore session")
-			log.debug(f"  old access token: {self.user.last_access_token[:10]}...")
+			assert self.user.refresh_token
 
-			# if this request fails it means that the token doesn't work
-			# we have no use for the retreived data
-			get(
-				self.user.tenant, self.user.last_access_token,
-				f"https://accounts.magister.net/connect/userinfo"
-			)
+			log.info("attempting to refresh tokens")
+			log.debug(f"  refresh token: {self.user.refresh_token[:10]}...")
 
-			self.access_token = self.user.last_access_token
+			self.tokenset = refresh(self.user.refresh_token)
+			assert self.tokenset
 
 		except Exception as e:
-			log.debug(f"  could not restore session (exception {e.__class__.__name__})")
+			log.debug(f"  could not refresh tokens ({e.__class__.__name__})")
 
-			# restoring fialed, so full authentication
-			self.access_token = authenticate(
-				self.user.school,
+			# refreshing failed, so full authentication
+			self.tokenset = authenticate(
+				self.user.school_id,
 				self.user.username,
 				self.user.password_text
 			)
 
-			if not self.access_token:
+			if not self.tokenset:
 				self.__authenticated = False
 				return
 
 			# get tenant (thanks sjoerd :))! )
 			self.user.tenant = get(
-				None, self.access_token,
+				None, self.tokenset.access_token,
 				"https://cors.sjoerd.dev/https://magister.net/.well-known/host-meta.json"
 			).json()["links"][0]["href"].strip("https://").split('.', 1)[0]
 			
-			self.user.last_access_token = self.access_token
+			self.user.refresh_token = self.tokenset.refresh_token
 			self.user.save()
 
-		if self.access_token:
+		if self.tokenset:
 			self.__authenticated = True
 			log.info(f"session authenticated (tenant: {self.user.tenant})")
 
@@ -84,27 +80,19 @@ class MagisterSession:
 	def update_credentails(self):
 		self.__assert_authenticated("update_credentials")
 		log.info("updating credentials")
-
-		__import__("pprint").pprint(
-			get(
-				self.user.tenant, self.access_token,
-				f"https://dewillem.magister.net/api/account"
-			)
-		)
 		
 		# retreive session id and account id
 		data = get(
-			self.user.tenant, self.access_token,
+			self.user.tenant, self.tokenset.access_token,
 			f"https://{self.user.tenant}.magister.net/api/sessions/current",
 		).json()
 		
 		self.session_id = data["id"]
 		account_link = data["links"]["account"]["href"]
-		# self.user.account_id = account_link.split("/")[-1]
 
 		# retreive email and student id
 		data = get(
-			self.user.tenant, self.access_token,
+			self.user.tenant, self.tokenset.access_token,
 			f"https://{self.user.tenant}.magister.net/{account_link}",
 		).json()
 		
@@ -134,7 +122,7 @@ class MagisterSession:
 		log.info("updating user info")
 
 		userinfo = get(
-			self.user.tenant, self.access_token,
+			self.user.tenant, self.tokenset.access_token,
 			"https://accounts.magister.net/connect/userinfo",
 		).json()
 		
@@ -190,7 +178,7 @@ class MagisterSession:
 			Vakken: list # Naam: str
 
 		data: List[Data] = get(
-			self.user.tenant, self.access_token,
+			self.user.tenant, self.tokenset.access_token,
 			self.account_api_url() + f"afspraken?status=1&tot={end}&van={start}"
 		).json()["Items"]
   

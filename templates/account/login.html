@@ -34,6 +34,8 @@
 </div>
 
 <script>
+  school_ids = []
+
   $("#id_school").on("input", () => {
     query = encodeURI($("#id_school").val());
 
@@ -48,8 +50,9 @@
 
         for(school in data) {
           list.appendChild(
-            new Option(value = data[school])
-          )
+            new Option(value = data[school].displayName)
+          );
+          school_ids[data[school].displayName] = data[school].id
         }
       },
     })

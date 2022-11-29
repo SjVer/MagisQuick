@@ -19,6 +19,10 @@ class LoginForm(AuthenticationForm):
         }),
     )
 
+    # TODO: school is an input field seperate form the form
+    # instead, the js of the login page sets the school_id field
+    # that is an invisible field of this form
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update(
@@ -32,9 +36,6 @@ class LoginForm(AuthenticationForm):
         school = self.cleaned_data.get("school")
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
-
-        # from ..magister.api import tenant_from_school
-        # tenant_from_school("d81b4ba47a2f49b79d2335eb3ee74426")
 
         if school is not None and username is not None and password:
             self.user_cache = authenticate(
