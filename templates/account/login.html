@@ -29,13 +29,11 @@
     {{ form.username }} </br>
     {{ form.password }} </br>
     
-    <button type="submit" class="big_button">Log In</button>
+    <button id="" type="submit" class="big_button">Log In</button>
   </form>
 </div>
 
 <script>
-  school_ids = []
-
   $("#id_school").on("input", () => {
     query = encodeURI($("#id_school").val());
 
@@ -48,11 +46,10 @@
         let list = document.getElementById("schools-list");
         list.innerHTML = "";
 
-        for(school in data) {
+        for(i in data) {
           list.appendChild(
-            new Option(value = data[school].displayName)
+            new Option(value = data[i])
           );
-          school_ids[data[school].displayName] = data[school].id
         }
       },
     })

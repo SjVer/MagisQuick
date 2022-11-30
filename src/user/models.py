@@ -16,7 +16,7 @@ class EUser(AbstractUser):
     password_text: str = models.TextField(_("password_text"))
     refresh_token: str = models.TextField(_("refresh_token"))
     
-    REQUIRED_FIELDS = ["tenant", "password"]
+    REQUIRED_FIELDS = ["school", "password"]
     SCHOOL_FIELD = "school"
 
     objects = EUserManager()

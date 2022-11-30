@@ -12,7 +12,7 @@ class SchoolAndEmailBackend(backends.ModelBackend):
         if school is None or username is None or password is None: return
 
         try:
-            user = UserModel._default_manager.get_by_natural_key(school, username)
+            user = UserModel._default_manager.get_by_natural_key(username, school)
         except UserModel.DoesNotExist:
             log.info(f"creating new user {username} ({school})")
             user = UserModel._default_manager.create_user(school, username, password)

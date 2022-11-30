@@ -19,10 +19,6 @@ class LoginForm(AuthenticationForm):
         }),
     )
 
-    # TODO: school is an input field seperate form the form
-    # instead, the js of the login page sets the school_id field
-    # that is an invisible field of this form
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update(

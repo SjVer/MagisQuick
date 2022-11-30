@@ -4,6 +4,7 @@ from datetime import datetime as dt
 from .. import log
 from ..user.models import EUser
 from .requests import get
+from .api import get_tenant_id
 from .auth import refresh, authenticate, TokenSet
 
 __all__ = [
@@ -39,6 +40,10 @@ class MagisterSession:
 	
 	# authenticate with Magister and get an access token
 	def authenticate(self):
+		if not self.user.school_id:
+			self.user.school_id = get_tenant_id(self.user.school)
+			log.info(f"retreived school id ({self.user.school_id[:10]}...)")
+
 		# try refreshing tokens
 		try:
 			assert self.user.refresh_token
