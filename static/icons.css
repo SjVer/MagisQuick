@@ -1,0 +1,21 @@
+@font-face {
+  font-family: magisterIcons;
+  src: url(magistersymbols.woff);
+}
+
+.icon {
+  font-family: magisterIcons;
+  font-size: 150%;
+}
+
+a.icon {
+  /* border-radius: 50%;
+  background-color: var(--title-color); */
+  color: inherit
+}
+
+.icon.books:before {content: "a"}
+.icon.calendar:before {content: "S"}
+.icon.person:before {content: "d"}
+.icon.edit:before {content: "?"}
+.icon.exit:before {content: "P"}

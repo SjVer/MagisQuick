@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+  .hbox {
+    display: flex;
+    height: 100%;
+  }
+  .hbox div, .hbox a {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+  }
+  .hbox::after {
+    clear: both;
+  }
+
+  .sidebar {
+    color: white;
+    background: var(--secondary-background);
+
+    width: min-content !important;
+    height: 100%;
+    padding: 10px 10px;
+    text-align: center;
+  }
+</style>
+
+<div class="hbox">
+  <div class="sidebar">
+    <div style="position:relative; bottom:0"></div>
+    <a class="icon books" href="/boeken"></a>
+    <a class="icon person" href="/account"></a>
+    <a class="icon exit" href="/logout"></a>
+  </div>
+  
+  {% block viewcontent %}
+  {% endblock %}
+</div>
+
+{% endblock %}

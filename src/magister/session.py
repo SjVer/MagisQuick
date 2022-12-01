@@ -162,9 +162,6 @@ class MagisterSession:
 
 		start = start.strftime("%Y-%m-%d")
 		end = end.strftime("%Y-%m-%d")
-
-		end = "2022-12-04"
-		start = "2022-11-27"
 		log.info(f"getting appointments from {start} to {end}")
 
 		class Data(TypedDict):

@@ -1,12 +1,12 @@
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate as django_authenticate
 from django.http import HttpRequest, HttpResponse
 from django.forms import CharField, TextInput
 from django.dispatch import receiver
 
-from ..magister import clear_session
+from ..magister import clear_session, api
 from ..user.models import EUser
 from .. import log
 
@@ -29,12 +29,17 @@ class LoginForm(AuthenticationForm):
         )
 
     def clean(self):
+        clear_session()
+
         school = self.cleaned_data.get("school")
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
 
+        # if not api.school_is_valid(school):
+        #     raise self.get_invalid_login_error()
+
         if school is not None and username is not None and password:
-            self.user_cache = authenticate(
+            self.user_cache = django_authenticate(
                 self.request,
                 school=school,
                 username=username,
@@ -60,9 +65,9 @@ def logout_page(request: HttpRequest) -> HttpResponse:
 
 @receiver(user_logged_in)
 def user_logged_in_callback(user: EUser, **kwargs):    
-    log.info(f"user {user} logged in")
+    log.info(f"user '{user}' logged in")
 
 @receiver(user_logged_out)
 def user_logged_out_callback(user: EUser, **kwargs): 
-    log.info(f"user {user} logged out")
+    log.info(f"user '{user}' logged out")
     clear_session()

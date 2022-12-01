@@ -5,17 +5,6 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<style>
-  input, input:focus, input:focus-visible, input:focus-within {
-    width: 100%;;
-    background-color: transparent;
-    font-family: var(--normal-font-family);
-    line-height: 1.5rem;
-    box-sizing: border-box;
-    display: block;
-  }
-</style>
-
 <datalist id="schools-list"></datalist>
 
 <div class="centered">
@@ -24,17 +13,26 @@
   
   <form method="post">
     {% csrf_token %}
-  
+    
     {{ form.school }} </br>
     {{ form.username }} </br>
     {{ form.password }} </br>
+  
+    {% if form.errors %}
+      <div class="error">De inloggegevens kloppen niet.</div>
+    {% endif %}
     
     <button id="" type="submit" class="big_button">Log In</button>
   </form>
 </div>
 
 <script>
+  var busy = false;
+
   $("#id_school").on("input", () => {
+    if(busy) return;
+    
+    busy = true;
     query = encodeURI($("#id_school").val());
 
     $.ajax({
@@ -51,8 +49,9 @@
             new Option(value = data[i])
           );
         }
+        busy = false;
       },
-    })
+    });
   });
 </script>
 

@@ -121,6 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -129,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Other settings
 
-AUTHENTICATION_BACKENDS = [ "src.backends.SchoolAndEmailBackend" ]
+AUTHENTICATION_BACKENDS = [ "src.backends.EBackend" ]
 
 AUTH_USER_MODEL = "user.EUser"
 
@@ -142,3 +143,4 @@ LOGOUT_URL = "/logout"
 LOGOUT_REDIRECT_URL = "/"
 
 CSRF_FAILURE_VIEW = "src.front.error_page"
+SILENCED_SYSTEM_CHECKS = ["auth.W004"]

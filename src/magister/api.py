@@ -5,6 +5,8 @@ from os import system
 
 from .. import log
 
+class InvalidTenant(Exception): pass
+
 __magister_cookies: RequestsCookieJar = None
 
 def get_cookies():
@@ -28,8 +30,7 @@ def get_tenants(query):
             "Host": "accounts.magister.net",
         }
     )
-    r.raise_for_status()
-    data = r.json() if r.content else []
+    data = r.json() if (r and r.content) else []
     return data
 
 def search_tenants(request: HttpRequest):
@@ -46,8 +47,13 @@ def search_tenants(request: HttpRequest):
 
 def get_tenant_id(name):
     data = get_tenants(name)
-    assert data[0]["displayName"] == name
+    if len(data) != 1 or data[0]["displayName"] != name:
+        raise InvalidTenant
     return data[0]["id"]
+
+def school_is_valid(name):
+    data = get_tenants(name)
+    return len(data) == 1 and data[0]["displayName"] == name
 
 def clear(request: HttpRequest):
     system("clear")

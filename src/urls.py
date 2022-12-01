@@ -24,6 +24,7 @@ from .front.views.account import account_page
 from .front.views.boeken import boeken_page
 
 urlpatterns = [
+    path("admin/login/", login_page),
     path("admin/", admin.site.urls),
     
     # included views:

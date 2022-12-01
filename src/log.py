@@ -6,7 +6,11 @@ WARNING = 1
 INFO = 2
 DEBUG = 3
 
+LOG_FILE = "/dev/stdout" # "log.txt"
+
 log_level = DEBUG
+
+__log_file = open(LOG_FILE, "a")
 
 def log(level, msg):
     if level > log_level: return
@@ -19,7 +23,10 @@ def log(level, msg):
     ][level]
     
     time = dt.now().strftime("%H:%M:%S")
-    tc.cprint(f"[{level_string} - {time}] {msg}", color)
+    entry = tc.colored(f"[{level_string} - {time}] {msg}\n", color)
+    
+    __log_file.write(entry)
+    __log_file.flush()
     
 def error(msg):   log(ERROR, msg)
 def warning(msg): log(WARNING, msg)

@@ -1,7 +1,9 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "views/viewbase.html" %}
+{% block viewcontent %}
 
-<h1>Boeken van {{full_name}}</h1>
-{{books|safe}}
+<div>
+    <h1>Boeken van {{full_name}}</h1>
+    {{books|safe}}
+</div>
 
 {% endblock %}
