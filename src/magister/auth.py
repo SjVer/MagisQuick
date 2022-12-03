@@ -8,7 +8,7 @@ from .. import log
 
 ISSUER = "https://accounts.magister.net"
 SCOPES = ["openid", "profile", "offline_access"]
-AUTH_CODE = "c0ad8cd4"
+AUTH_CODE = "74617461"
 ATTEMPTS = 3
 
 class AuthError(Exception):
@@ -107,7 +107,6 @@ def authenticate(tenant_id, username, password) -> TokenSet:
             return get_tokenset(code)
         except Exception as e:
             log.error(f"failed to authenticate ({e.__class__.__name__})")
-            return None
 
 # get tokenset using refresh token
 def refresh(refresh_token) -> TokenSet:
@@ -131,5 +130,5 @@ def refresh(refresh_token) -> TokenSet:
             data["id_token"]
         )
     except Exception as e:
-        log.warning(f"failed to refresh ({e.__class__.__name__})")
+        log.warning(f"failed to refresh ({e.__class__.__name__}: {e})")
         return None
