@@ -29,7 +29,13 @@ challenge_args, verifier = client.add_code_challenge()
 def extract_param(url, param):
     return url.split(f"{param}=", 1)[1].split("&", 1)[0]
 
-# get auth code
+# TODO: The authcode now defined as AUTH_CODE can be found in account-<...>.js
+# which is requested by magister when starting to log in (/account/login).
+# We do however probably need a state and a nonce to request the html page that
+# requests the js file (which might be dynamically named).
+# The authcode can be found in the js source code just after `(o=["` (i think).
+
+# get authentication code
 def get_code(tenant_id, username, password):
     auth_req = client.construct_AuthorizationRequest(request_args={
         "client_id": client.client_id,

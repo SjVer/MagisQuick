@@ -1,4 +1,3 @@
-from typing import TypedDict, List
 from datetime import datetime as dt
 
 from .. import log
@@ -6,6 +5,7 @@ from ..user.models import EUser
 from .requests import get
 from .api import get_tenant_id
 from .auth import refresh, authenticate, TokenSet
+from .data import *
 
 __all__ = [
 	"UserInfo",
@@ -148,7 +148,7 @@ class MagisterSession:
 		]: self.update_userinfo()
 	
 	# {tenant}.magister.net/api/personen/{id}
-	def account_api_url(self):
+	def account_api_url(self) -> str:
 		self.require_credentials()
 		return str.format(
 			"https://{}.magister.net/api/personen/{}/",
@@ -157,31 +157,19 @@ class MagisterSession:
 		)
 		
 	# get appointments
-	def get_appointments(self, start: dt, end: dt):
+	def get_appointments(self, start: dt, end: dt) -> List[AppointmentData]:
 		self.__assert_authenticated("get_appointments")
 
 		start = start.strftime("%Y-%m-%d")
 		end = end.strftime("%Y-%m-%d")
 		log.info(f"getting appointments from {start} to {end}")
 
-		class Data(TypedDict):
-			Aantekeningen: dict # ?
-			Afgerond: bool
-			Bijlagen: list # ?
-			Docenten: list # Docentencode: str, Naam: str
-			DuurtHeleDag: bool
-			Einde: str
-			Id: int
-			LesuurTotMet: int
-			LesuurVan: int
-			Lokatie: str
-			Omschrijving: str
-			Start: str
-			Vakken: list # Naam: str
-
-		data: List[Data] = get(
+		apps = get(
 			self.user.tenant, self.tokenset.access_token,
 			self.account_api_url() + f"afspraken?status=1&tot={end}&van={start}"
 		).json()["Items"]
-  
-		return data 
+
+		for app in apps:
+			app["InfoType"] = AppInfoType(app["InfoType"])
+
+		return apps

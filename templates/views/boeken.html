@@ -2,8 +2,31 @@
 {% block viewcontent %}
 
 <div>
-    <h1>Boeken van {{full_name}}</h1>
-    {{books|safe}}
+  <h1>Boekenoverzicht</h1>
+  <h3>Deze boeken moet je {{date}} mee naar huis nemen.</h3>
+
+  <table style="width:500px">
+    <colgroup>
+      <col style="width:30px">
+      <col>
+      <col style="width:90px">
+    </colgroup>
+
+    <tr>
+      <th>TODO: put icon here</th>
+      <th>Vak</th>
+      <th>Datum</th>
+    </tr>
+
+    <!-- entries here -->
+    {% for s in subjects %}
+      <tr>
+        <td>{{s.reason}}</td>
+        <td>{{s.name}}</td>
+        <td>{{s.date}}</td>
+      </tr>
+    {% endfor %}
+  </table>
 </div>
 
 {% endblock %}

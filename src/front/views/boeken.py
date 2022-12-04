@@ -13,11 +13,11 @@ from ... import figure_out
 def boeken_page(request: HttpRequest):
 	session = get_session(request)
 	session.require_userinfo()
+	subjects = figure_out.subjects(session)
 
 	return render(request, "views/boeken.html", {
 		"settings": settings,
 		"title": "Boeken",
-
 		"full_name": session.user.get_full_name(),
-		"books": "</br>".join(figure_out.books(session)),
+		"subjects": subjects,
 	})

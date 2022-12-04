@@ -26,6 +26,7 @@ h1 {
   font-weight: 700;
   margin-block-start: 0px;
   margin-block-end: 5px;
+  margin-bottom: 10px !important;
 }
 h1::after {
   color: var(--highlight-color);
@@ -36,6 +37,13 @@ h2 {
   color: var(--subtitle-color);
   font-family: var(--subtitle-font-family);
   font-size: 20px;
+  font-weight: 500;
+}
+
+h3 {
+  color: var(--normal-color);
+  font-family: var(--subtitle-font-family);
+  font-size: 15px;
   font-weight: 500;
 }
 
@@ -56,6 +64,30 @@ input, input:focus, input:focus-visible, input:focus-within {
 }
 input::-webkit-input-placeholder {
   color: rgb(70, 70, 70);
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  color: var(--grey-color);
+  border-collapse: collapse;
+}
+
+th, td {
+  border-width: 0 0 0 1px;
+  overflow: hidden;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  border-style: solid;
+  border-color: #ccc;
+  box-sizing: border-box;
+  position: relative;
+  padding: 4px;
+  border: 1px solid #ccc;
+}
+
+td {
+  color: #666;
 }
 
 .centered {

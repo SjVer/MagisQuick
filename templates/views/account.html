@@ -1,9 +1,11 @@
 {% extends "views/viewbase.html" %}
 {% block viewcontent %}
 
-<h1>{{ full_name }}</h1>
-School: {{ user.school }} </br>
-Gebruikersnaam: {{ user.username }} </br>
-Emailadres: {{ user.email }} </br>
+<div>
+    <h1>{{ full_name }}</h1>
+    School: {{ user.school }} </br>
+    Gebruikersnaam: {{ user.username }} </br>
+    Emailadres: {{ user.email }} </br>
+</div>
 
 {% endblock %}
