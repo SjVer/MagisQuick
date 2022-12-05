@@ -19,7 +19,7 @@ from django.urls import path
 
 from .magister import api
 from .front import root_page, error_page
-from .front.account import login_page, logout_page
+from .front.account import login_page, logout_page, delete_user
 from .front.views.account import account_page
 from .front.views.boeken import boeken_page
 
@@ -29,6 +29,7 @@ urlpatterns = [
     
     path("login/", login_page),
     path("logout/", logout_page),
+    path("delete_user/", delete_user),
 
     path("api/search_tenants", api.search_tenants),
     path("api/clear", api.clear),

@@ -40,7 +40,7 @@ class MagisterSession:
 	
 	# authenticate with Magister and get an access token
 	def authenticate(self):
-		if not self.user.school_id and False:
+		if not self.user.school_id:
 			self.user.school_id = get_tenant_id(self.user.school)
 			log.info(f"retreived school id ({self.user.school_id[:10]}...)")
 

@@ -13,7 +13,7 @@ def account_page(request: HttpRequest):
 	session = get_session(request)
 	session.require_credentials()
 	session.require_userinfo()
-	
+
 	return render(request, "views/account.html", {
 		"settings": settings,
 		"title": "Account",

@@ -2,11 +2,12 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate as django_authenticate
-from django.http import HttpRequest, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.forms import CharField, TextInput
 from django.dispatch import receiver
 
-from ..magister import clear_session, api
+from ..magister import clear_session
 from ..user.models import EUser
 from .. import log
 
@@ -52,16 +53,24 @@ class LoginForm(AuthenticationForm):
 
         return self.cleaned_data
 
-
 def login_page(request: HttpRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        return HttpResponseRedirect("/")
+
     return LoginView.as_view(
         template_name = "account/login.html",
         authentication_form=LoginForm
     )(request)
 
+@login_required
 def logout_page(request: HttpRequest) -> HttpResponse:
     return LogoutView.as_view()(request)
 
+@login_required
+def delete_user(request: HttpRequest) -> HttpResponse:
+    log.info(f"deleting user {request.user}")
+    request.user.delete()
+    return HttpResponseRedirect("/logout")    
 
 @receiver(user_logged_in)
 def user_logged_in_callback(user: EUser, **kwargs):    

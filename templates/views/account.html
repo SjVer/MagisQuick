@@ -4,11 +4,25 @@
 <div>
   <style>
     p { margin: 5px 0px }
+
+    #rusure:not([hidden]) {
+      display: block;
+      width: fit-content;
+      margin-bottom: 10px;
+    }
   </style>
 
   <script>
-    function delete_acc() {
-      console.log("DEE")
+    var confirming = false;
+
+    function delete_account() {
+      if (confirming) {
+        window.location.href = "/delete_user";
+      } else {
+        confirming = true;
+        document.getElementById("rusure").hidden = false;
+      }
+
     }
   </script>
   
@@ -23,7 +37,10 @@
   </div>
 
   <h3 class="bold">Beheer</h3>
-  <button onclick="delete_acc()">Verwijder MagisQuick account</button>
+  <div style="margin-left:10px">
+    <span id="rusure" class="error" hidden="true">Weet je het zeker?<br></span>
+    <button onclick="delete_account()">Verwijder MagisQuick account</button>
+  </div>
 </div>
 
 {% endblock %}
