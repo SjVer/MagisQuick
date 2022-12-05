@@ -1,6 +1,7 @@
 :root {
   --primary-background: #1f97f9;
   --secondary-background: #0683ea;
+  --ternary-background: #016695;
 
   --normal-font-family: tahoma, sans-serif;
   --title-font-family: "Arboria", sans-serif;
@@ -66,10 +67,22 @@ input::-webkit-input-placeholder {
   color: rgb(70, 70, 70);
 }
 
+button {
+  font-weight: 600;
+  color: var(--primary-background);
+  background-color: transparent;
+  transition-duration: 0.2s;
+  border: 3px solid var(--primary-background);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+button:hover {
+  background-color: #1f97f930;
+}
+
 table {
   width: 100%;
   text-align: left;
-  color: var(--grey-color);
   border-collapse: collapse;
 }
 
@@ -84,10 +97,6 @@ th, td {
   position: relative;
   padding: 4px;
   border: 1px solid #ccc;
-}
-
-td {
-  color: #666;
 }
 
 .centered {
@@ -117,4 +126,8 @@ td {
   padding: 5px;
   border-radius: 3px;
   margin-block-end: 10px;
+}
+
+.bold {
+  font-weight: 600;
 }

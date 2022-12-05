@@ -62,11 +62,18 @@ def subjects(session: MagisterSession) -> List[Subject]:
         key=lambda d: d["Start"]
     )
 
-    return [
-        Subject(
+    subjects = []
+    for app in sorted_apps:
+        if not app["Vakken"]: return
+
+        dateparts = app["Start"].split("T", 1)[0].split("-")
+        dateparts.reverse()
+        date = "-".join(dateparts)
+
+        subjects.append(Subject(
             app["Vakken"][0]["Naam"],
             app["InfoType"].readable(),
-            app["Start"].split("T", 1)[0]
-        )
-        for app in sorted_apps if len(app["Vakken"]) > 0
-    ]
+            date
+        ))
+
+    return subjects

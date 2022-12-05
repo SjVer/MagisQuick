@@ -6,13 +6,14 @@
   .hbox {
     display: flex;
     height: 100%;
+    margin-right: 30px;
   }
   .hbox > * {
     display: block;
     width: 100%;
     height: auto;
     margin: 0 auto;
-    margin-right: 10px;
+    margin-right: 20px;
     float: left;
   }
   .hbox::after {
@@ -25,10 +26,15 @@
     width: min-content !important;
     padding: 15px;
     text-align: center;
+    display: flex;
+    flex-flow: column;
   }
-
   .sidebar > * {
-    margin-bottom: 10px;
+    display: block;
+    margin-top: 30px;
+  }
+  .sidebar > *:last-child {
+    margin-bottom: 30px;
   }
 </style>
 
@@ -36,11 +42,14 @@
   <div class="sidebar">
     <a class="icon books" href="/boeken"></a>
     <a class="icon person" href="/account"></a>
+    <div style="display:flex;flex:1 1 auto"></div>
     <a class="icon exit" href="/logout"></a>
   </div>
   
-  {% block viewcontent %}
-  {% endblock %}
+  <div style="margin-top:30px">
+    {% block viewcontent %}
+    {% endblock %}
+  </div>
 </div>
 
 {% endblock %}

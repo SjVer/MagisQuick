@@ -2,10 +2,28 @@
 {% block viewcontent %}
 
 <div>
-    <h1>{{ full_name }}</h1>
-    School: {{ user.school }} </br>
-    Gebruikersnaam: {{ user.username }} </br>
-    Emailadres: {{ user.email }} </br>
+  <style>
+    p { margin: 5px 0px }
+  </style>
+
+  <script>
+    function delete_acc() {
+      console.log("DEE")
+    }
+  </script>
+  
+  <h1>Accountbeheer</h1>
+  
+  <h3 class="bold">Persoonlijke gegevens</h3>
+  <div style="margin-left:10px">
+    <p>Naam: {{ full_name }}</p>
+    <p>School: {{ user.school }}</p>
+    <p>Gebruikersnaam: {{ user.username }}</p>
+    <p>Emailadres: {{ user.email }}</p>
+  </div>
+
+  <h3 class="bold">Beheer</h3>
+  <button onclick="delete_acc()">Verwijder MagisQuick account</button>
 </div>
 
 {% endblock %}
