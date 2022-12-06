@@ -3,7 +3,35 @@
 
 <div>
   <style>
-    p { margin: 5px 0px }
+    .entry {
+      display: block;
+      margin: 5px 0px;
+      max-width: fit-content;
+      word-break: break-all;
+      overflow: hidden;
+      white-space: nowrap;
+      break-after: page;
+    }
+
+    .link {
+      color: var(--secondary-background);
+      text-decoration: underline;
+    }
+    /* .link::before {
+      font-family: magisterIcons;
+      content: "Q ";
+    } */
+
+    .indented {
+      margin-left: 10px;
+      max-width: var(--big-width);
+    }
+
+    #cplbl {
+      color: var(--primary-background);
+      -webkit-transition: opacity 2s, visibility 2s;
+      transition: opacity 2s, visibility 2s;
+    }
 
     #rusure:not([hidden]) {
       display: block;
@@ -11,36 +39,78 @@
       margin-bottom: 10px;
     }
   </style>
-
+  
+  <h1>Accountbeheer</h1>
+  
+  <h3 class="bold">Persoonlijke gegevens</h3>
+  <div class="indented">
+    <p class="entry">Naam: {{ full_name }}</p>
+    <p class="entry">School: {{ user.school }}</p>
+    <p class="entry">Gebruikersnaam: {{ user.username }}</p>
+    <p class="entry">Emailadres: {{ user.email }}</p>
+  </div>
+  
+  <h3 class="bold">Interne gegevens</h3>
+  <div class="indented">
+    <p class="entry" id="cplbl">gekopiëerd!</p>
+    <a class="entry cp">Tenant: {{ user.tenant }}</a>
+    <a class="entry cp">Account ID: {{ user.account_id }}</a>
+    <a class="entry cp">Leerling ID: {{ user.student_id }}</a>
+    <a class="entry cp">School ID: {{ user.school_id }}</a>
+    <p>(Klik om te kopiëren)</p>
+  </div>
+  
+  <h3 class="bold">Beheer</h3>
+  <div class="indented">
+    <a class="entry link" href="{{web_link}}">Open Magister</a>
+    <a class="entry link" href="{{acc_link}}">Beheer je Magister account</a>
+    <div style="height:5px"></div>
+    <span id="rusure" class="error" hidden>Weet je het zeker?<br></span>
+    <button onclick="delete_account()">Verwijder MagisQuick account</button>
+  </div>
+  
   <script>
-    var confirming = false;
+    var copied_label = document.getElementById("cplbl");
+    copied_label.style.display = "none";
+    
+    var cp_entries = document.getElementsByClassName("cp");
+    for(var i = 0; i < cp_entries.length; i++) {
 
+      let entry = cp_entries[i];
+      let value = entry.innerHTML.split(": ", 2)[1];
+
+      cp_entries[i].onclick = function() {
+        navigator.clipboard.writeText(value);
+        entry.parentNode.insertBefore(copied_label, entry);
+
+        copied_label.style.display = "block";
+        copied_label.style.visibility = "100%";
+        copied_label.style.opacity = "100%";
+
+        setTimeout(() => {
+          copied_label.style.visibility = "0%";
+          copied_label.style.opacity = "0%";
+        }, 500);
+        setTimeout(() => {
+          copied_label.style.display = "none";
+        }, 1750);
+      }
+    }
+
+    var confirming = false;
     function delete_account() {
       if (confirming) {
         window.location.href = "/delete_user";
       } else {
         confirming = true;
         document.getElementById("rusure").hidden = false;
+        setTimeout(() => {
+          confirming = false;
+          document.getElementById("rusure").hidden = true;
+        }, 3000);
       }
-
     }
   </script>
-  
-  <h1>Accountbeheer</h1>
-  
-  <h3 class="bold">Persoonlijke gegevens</h3>
-  <div style="margin-left:10px">
-    <p>Naam: {{ full_name }}</p>
-    <p>School: {{ user.school }}</p>
-    <p>Gebruikersnaam: {{ user.username }}</p>
-    <p>Emailadres: {{ user.email }}</p>
-  </div>
-
-  <h3 class="bold">Beheer</h3>
-  <div style="margin-left:10px">
-    <span id="rusure" class="error" hidden="true">Weet je het zeker?<br></span>
-    <button onclick="delete_account()">Verwijder MagisQuick account</button>
-  </div>
 </div>
 
 {% endblock %}

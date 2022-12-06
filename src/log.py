@@ -1,19 +1,29 @@
 from datetime import datetime as dt
+from django.conf import settings
 import termcolor as tc
+from os import path, makedirs
+from sys import stdout
 
 ERROR = 0
 WARNING = 1
 INFO = 2
 DEBUG = 3
 
-LOG_FILE = "/dev/stdout" # "log.txt"
+LOG_FILE = f"logs/log-{dt.now().strftime('%d-%m-%Y')}.txt"
 
-log_level = DEBUG
+if settings.DEBUG:
+    __log_level =  DEBUG
+    __log_file = stdout
+else:
+    __log_level = eval(settings.LOG_LEVEL)
+    if not path.exists(path.dirname(LOG_FILE)):
+        makedirs(path.dirname(LOG_FILE))
+    __log_file = open(LOG_FILE, "a")
 
-__log_file = open(LOG_FILE, "a")
+__to_stdout = __log_file == stdout
 
 def log(level, msg):
-    if level > log_level: return
+    if level > __log_level: return
 
     level_string, color = [
         ("ERROR  ", "red"),
@@ -23,7 +33,10 @@ def log(level, msg):
     ][level]
     
     time = dt.now().strftime("%H:%M:%S")
-    entry = tc.colored(f"[{level_string} - {time}] {msg}\n", color)
+    if __to_stdout:
+        entry = tc.colored(f"[{level_string} - {time}] {msg}\n", color)
+    else:
+        entry = f"[{level_string} - {time}] {msg}\n"
     
     __log_file.write(entry)
     __log_file.flush()

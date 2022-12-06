@@ -1,14 +1,15 @@
-from oic.oic import Client
 from oic.utils.authn.client import CLIENT_AUTHN_METHOD
-from requests import get, post
+from oic.oic import Client
 from urllib.parse import parse_qs, urlparse
+from requests import get, post
+from django.core.cache import cache
 from dataclasses import dataclass
+from datetime import datetime as dt
 
 from .. import log
 
 ISSUER = "https://accounts.magister.net"
 SCOPES = ["openid", "profile", "offline_access"]
-AUTH_CODE = "74617461"
 ATTEMPTS = 3
 
 class AuthError(Exception):
@@ -29,31 +30,91 @@ challenge_args, verifier = client.add_code_challenge()
 def extract_param(url, param):
     return url.split(f"{param}=", 1)[1].split("&", 1)[0]
 
-# TODO: The authcode now defined as AUTH_CODE can be found in account-<...>.js
+# The authcode needed for challenges can be found in account-<...>.js
 # which is requested by magister when starting to log in (/account/login).
-# We do however probably need a state and a nonce to request the html page that
-# requests the js file (which might be dynamically named).
-# The authcode can be found in the js source code just after `(o=["` (i think).
+#
+# The authcode can be found in the js source code just after `(o=["` (I think)
+# and is "encoded" as follows: There are two arrays separated by a comma. The
+# first array contains strings and the second contains the indices of the first
+# array. Concatenating the strings at those indices results in the authcode.
+# For example: `["X", "Y", "Z"],["2", "0"]` becomes "ZX". Not very safe eh?
+# 
+# This is an example of the relevant source code:
+# ```js
+#   r[zi[0]]=(
+#     o = ["2832a884", "314d", "201413", "4161"]),
+#     ["2", "3"].map(function (t) {
+#       return o[parseInt(t) || 0];
+#    }
+#  ).join("");
+# // becomes "2014134161"
+# ```
+#
+# Previous:
+#   6-12-'22: `["2832a884","314d","201413","4161"],["2","3"]` -> "2014134161"
+#   7-12-'22: 
+
+def get_challenge_authcode(session_id, return_url):
+    # try to use old code first
+    if cache.get("challenge_auth_code_date") == dt.now().date():
+        old_code = cache.get("challenge_auth_code")
+        log.debug(f"  challenge auth code: {old_code} (cached)")
+        return old_code
+
+    # get html of login redirect page
+    r = get(
+        ISSUER + "/account/login",
+        params={
+            "sessionId": session_id,
+            "returnUrl": return_url
+        }
+    )
+    r.raise_for_status()
+    
+    # get js file
+    js_file_id = r.text.split("src=\"js/account-", 1)[1].split(".js\"")[0]
+    r = get(f"{ISSUER}/js/account-{js_file_id}.js")
+    r.raise_for_status()
+
+    # find relevant code
+    js = r.text.split("r[zi[0]]=(o=", 1)[1].split(".map", 1)[0]
+    split_index = js.find("],[") + 1
+
+    # decrypt it
+    strings = eval(js[:split_index])
+    indices = [int(i) for i in eval(js[split_index + 1:])]
+    auth_code = ''.join([strings[i] for i in indices])
+    
+    # store code to cache and return
+    cache.set("challenge_auth_code", auth_code)
+    cache.set("challenge_auth_code_date", dt.now().date()) 
+    log.debug(f"  challenge auth code: {auth_code}")
+    return auth_code
 
 # get authentication code
 def get_code(tenant_id, username, password):
-    auth_req = client.construct_AuthorizationRequest(request_args={
+    # notify magister that we'll be logging in
+    login_url = client.construct_AuthorizationRequest(request_args={
         "client_id": client.client_id,
         "response_type": "code id_token",
         "scope": SCOPES,
         "prompt": "select_account",
         **challenge_args
-    })
-    login_url = auth_req.request(client.authorization_endpoint)
-
+    }).request(client.authorization_endpoint)
     pre_auth_res = get(login_url, allow_redirects=False)
     auth_res = get(pre_auth_res.headers["location"], allow_redirects=False)
+
+    # extract the session-related information we need
     auth_params = parse_qs(urlparse(auth_res.headers["location"]).query)
     session_id = auth_params["sessionId"][0]
     return_url = auth_params["returnUrl"][0]
     auth_cookies = auth_res.headers["Set-Cookie"]
     xsrf_token = auth_cookies.split("XSRF-TOKEN=", 1)[-1].split(";", 1)[0]
 
+    # get the challenge auth code
+    challenge_auth_code = get_challenge_authcode(session_id, return_url)
+
+    # send the challenges
     def challenge(what, args):
         r = post(ISSUER + "/challenges/" + what,
             headers={
@@ -62,7 +123,7 @@ def get_code(tenant_id, username, password):
                 "X-XSRF-TOKEN": xsrf_token
             },
             json={
-                "authCode": AUTH_CODE,
+                "authCode": challenge_auth_code,
                 "sessionId": session_id,
                 "returnUrl": return_url,
                 **args
@@ -77,6 +138,7 @@ def get_code(tenant_id, username, password):
         challenge("password", {"password": password}) \
         .headers["Set-Cookie"]
 
+    # get the auth code
     auth_res = get(ISSUER + return_url, headers={"Cookie": auth_cookies}, allow_redirects=False)
     code = extract_param(auth_res.headers["location"], "code")
     
@@ -112,6 +174,7 @@ def authenticate(tenant_id, username, password) -> TokenSet:
             log.debug(f"  authorization code: {code[:10]}...")
             return get_tokenset(code)
         except Exception as e:
+            cache.delete("challenge_auth_code")
             log.error(f"failed to authenticate ({e.__class__.__name__})")
 
 # get tokenset using refresh token
@@ -136,5 +199,17 @@ def refresh(refresh_token) -> TokenSet:
             data["id_token"]
         )
     except Exception as e:
-        log.warning(f"failed to refresh ({e.__class__.__name__}: {e})")
+        log.warning(f"failed to refresh ({e.__class__.__name__})")
         return None
+
+def end_session(id_token):
+    try:
+        r = get(
+            client._endpoint("end_session_endpoint"),
+            headers={
+                "id_token_hint": id_token
+            }
+        )
+        r.raise_for_status()
+    except Exception as e:
+        log.warning(f"failed to end session ({e.__class__.__name__})")

@@ -4,20 +4,22 @@ from .. import log
 from ..user.models import EUser
 from .requests import get
 from .api import get_tenant_id
-from .auth import refresh, authenticate, TokenSet
 from .data import *
+from . import auth
 
 __all__ = [
 	"UserInfo",
 	"MagisterSession"
 ]
 
+class NotAuthenticatedException(Exception): pass
+
 class MagisterSession:
 	# user stuff
 	user: EUser
 	
 	# api stuff
-	tokenset: TokenSet
+	tokenset: auth.TokenSet
 	session_id: int
 	
 	# cached info
@@ -36,7 +38,7 @@ class MagisterSession:
 
 	def __assert_authenticated(self, name):
 		if not self.__authenticated:
-			raise Exception(f"not authenticated ({name})")
+			raise NotAuthenticatedException(f"not authenticated ({name})")
 	
 	# authenticate with Magister and get an access token
 	def authenticate(self):
@@ -51,14 +53,14 @@ class MagisterSession:
 			log.info("attempting to refresh tokens")
 			log.debug(f"  refresh token: {self.user.refresh_token[:10]}...")
 
-			self.tokenset = refresh(self.user.refresh_token)
+			self.tokenset = auth.refresh(self.user.refresh_token)
 			assert self.tokenset
 
 		except Exception as e:
 			log.debug(f"  could not refresh tokens ({e.__class__.__name__})")
 
 			# refreshing failed, so full authentication
-			self.tokenset = authenticate(
+			self.tokenset = auth.authenticate(
 				self.user.school_id,
 				self.user.username,
 				self.user.password_text
@@ -80,6 +82,11 @@ class MagisterSession:
 		if self.tokenset:
 			self.__authenticated = True
 			log.info(f"session authenticated (tenant: {self.user.tenant})")
+
+	def end_session(self):
+		auth.end_session(self.tokenset.id_token)
+		self.__authenticated = False
+		log.info("session ended")
 
 	# update ID's and email address
 	def update_credentails(self):

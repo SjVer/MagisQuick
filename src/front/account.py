@@ -7,7 +7,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.forms import CharField, TextInput
 from django.dispatch import receiver
 
-from ..magister import clear_session
+from ..magister import clear_session, get_session
 from ..user.models import EUser
 from .. import log
 
@@ -64,6 +64,7 @@ def login_page(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def logout_page(request: HttpRequest) -> HttpResponse:
+    get_session(request).end_session()
     return LogoutView.as_view()(request)
 
 @login_required

@@ -12,18 +12,48 @@
   --title-color: rgb(31, 151, 249);
   --subtitle-color: rgb(2, 53, 78);
   --highlight-color: rgb(255, 130, 5);
+
+  --normal-font-size: 15px;
+  --medium-font-size: 20px;
+  --large-font-size: 35px;
+
+  --small-px: 5px;
+  --medium-px: 10px;
+  --large-px: 30px;
+  --sorta-medium-px: 30px;
+  --big-width: 80%;
+}
+
+/* overrides for mobile */
+@media (max-width: 500px) {
+:root {
+  --normal-font-size: 10px;
+  --medium-font-size: 15px;
+  --large-font-size: 25px;
+
+  --small-px: 3px;
+  --medium-px: 6px;
+  --large-px: 15px;
+  --sorta-medium-px: 10px;
+  --big-width: 80%;
+}
+}
+
+* {
+  font-family: var(--normal-font-family);
+  font-size: var(--normal-font-size);
+  color: var(--normal-color);
+  text-overflow: ellipsis;
 }
   
 body {
-  font-family: var(--normal-font-family);
-  color: var(--normal-color);
   margin: 0;
 }
 
 h1 {
   color: var(--title-color);
   font-family: var(--title-font-family);
-  font-size: 36px;
+  font-size: var(--large-font-size);
   font-weight: 700;
   margin-block-start: 0px;
   margin-block-end: 5px;
@@ -37,14 +67,14 @@ h1::after {
 h2 {
   color: var(--subtitle-color);
   font-family: var(--subtitle-font-family);
-  font-size: 20px;
+  font-size: var(--medium-font-size);
   font-weight: 500;
 }
 
 h3 {
   color: var(--normal-color);
   font-family: var(--subtitle-font-family);
-  font-size: 15px;
+  font-size: var(--normal-font-size);
   font-weight: 500;
 }
 
@@ -55,10 +85,7 @@ input, input:focus, input:focus-visible, input:focus-within {
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: var(--small-px) var(--medium-px);
   line-height: 1.5rem;
   box-sizing: border-box;
   display: block;
@@ -72,9 +99,9 @@ button {
   color: var(--primary-background);
   background-color: transparent;
   transition-duration: 0.2s;
+  padding: var(--small-px) var(--medium-px);
   border: 3px solid var(--primary-background);
   border-radius: 8px;
-  padding: 5px 10px;
 }
 button:hover {
   background-color: #1f97f930;
@@ -95,7 +122,7 @@ th, td {
   border-color: #ccc;
   box-sizing: border-box;
   position: relative;
-  padding: 4px;
+  padding: var(--small-px);
   border: 1px solid #ccc;
 }
 
@@ -109,7 +136,7 @@ th, td {
 }
 
 .big_button {
-  font-size: large;
+  font-size: var(--normal-font-size);
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -118,6 +145,9 @@ th, td {
   color: #fff;
   padding: 1rem;
   width: 100%;
+}
+.big_button:hover {
+  background: var(--ternary-background);
 }
 
 .error {

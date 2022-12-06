@@ -13,7 +13,7 @@ class AppInfoType(int):
             case self.HUISWERK: return "huiswerk"
             case self.PROEFWERK: return "proefwerk"
             case self.SO: return "SO"
-            case _: return ""
+            case _: return "les"
 
 class AppointmentData(TypedDict):
     Aantekeningen: dict # ?

@@ -4,13 +4,10 @@ from django.shortcuts import render
 from django.conf import settings
 
 from datetime import datetime
-from locale import setlocale, LC_TIME
 
 from .. import via_loading_page, with_error_message
 from ...magister import get_session
 from ... import figure_out
-
-setlocale(LC_TIME, "nl_NL.utf8")
 
 @login_required
 @via_loading_page("Boeken")

@@ -13,7 +13,7 @@
     width: 100%;
     height: auto;
     margin: 0 auto;
-    margin-right: 20px;
+    margin-right: var(--sorta-medium-px);
     float: left;
   }
   .hbox::after {
@@ -24,17 +24,17 @@
     color: white;
     background: var(--secondary-background);
     width: min-content !important;
-    padding: 15px;
+    padding: var(--medium-px);
     text-align: center;
     display: flex;
     flex-flow: column;
   }
   .sidebar > * {
     display: block;
-    margin-top: 30px;
+    margin-top: var(--large-px);
   }
   .sidebar > *:last-child {
-    margin-bottom: 30px;
+    margin-bottom: var(--large-px);
   }
 </style>
 
@@ -46,7 +46,7 @@
     <a class="icon exit" href="/logout"></a>
   </div>
   
-  <div style="margin-top:30px">
+  <div style="margin-top:var(--large-px)">
     {% block viewcontent %}
     {% endblock %}
   </div>

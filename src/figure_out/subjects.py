@@ -64,10 +64,14 @@ def subjects(session: MagisterSession) -> List[Subject]:
 
     subjects = []
     for app in sorted_apps:
-        if not app["Vakken"]: return
+        if not app["Vakken"]: continue
+
+        # geen normale lessen
+        # if app["InfoType"] == 0: continue
 
         dateparts = app["Start"].split("T", 1)[0].split("-")
         dateparts.reverse()
+        dateparts[-1] = "'" + dateparts[-1][2:]
         date = "-".join(dateparts)
 
         subjects.append(Subject(

@@ -1,4 +1,14 @@
+{% load static %}
+
+<!-- load these now that we're loading anyway -->
+<link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'icons.css' %}">
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<!-- for mobile devices -->
+<meta content='width=device-width, initial-scale=1' name='viewport'/>
 
 <script>
   $.ajax({

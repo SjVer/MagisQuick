@@ -17,6 +17,8 @@ def account_page(request: HttpRequest):
 	return render(request, "views/account.html", {
 		"settings": settings,
 		"title": "Account",
-		"user": session.user,
-		"full_name": session.user.get_full_name()
+		"user": request.user,
+		"full_name": request.user.get_full_name(),
+		"web_link": f"https://{request.user.tenant}.magister.net",
+		"acc_link": f"https://accounts.magister.net",
 	})

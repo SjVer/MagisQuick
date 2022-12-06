@@ -22,9 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-m54!97!ft^2^9fnw2o=l!e$@^_rrhdihz+4(%((-9gsrwxxhc1'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ["127.0.0.1"]
 
 
@@ -128,6 +125,18 @@ STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1
+        }
+    }
+}
+
 # Other settings
 
 AUTHENTICATION_BACKENDS = [ "src.backends.EBackend" ]
@@ -144,3 +153,6 @@ LOGOUT_REDIRECT_URL = "/"
 
 CSRF_FAILURE_VIEW = "src.front.error_page"
 SILENCED_SYSTEM_CHECKS = ["auth.W004"]
+
+DEBUG = True
+LOG_LEVEL = "INFO"

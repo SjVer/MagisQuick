@@ -2,28 +2,33 @@
 {% block viewcontent %}
 
 <div>
-  <!-- td:not([reason=""])::before { color: var(--grey-color) }
-  td[reason="huiswerk"]:before { content: "a" } -->
   <style>
     .reason {
       float: right;
       color: white;
-      font-size: small;
-      padding: 5px;
-      border-radius: 5px;
+      font-size: var(--normal-font-size);
+      padding: var(--small-px);
+      border-radius: var(--small-px);
       background-color: var(--ternary-background);
     }
+
+    .icon.proefwerk::before {content: "o"}
+    .icon.mondeling::before {content: "p"}
+    .icon.huiswerk::before {content: "Y"}
+    .icon.les::before {content: "a"}
+    .icon.SO::before {content: "o"}
+    .icon.SE::before {content: "o"}
   </style>
   
   <h1>Boekenoverzicht</h1>
   <h3>Deze boeken moet je {{date}} mee naar huis nemen.</h3>
 
-  <table style="width:350px">
+  <table style="width:var(--big-width)">
     <colgroup>
       <col style="width:30px">
       <col style="width:fit-content">
       <col>
-      <col style="width:90px">
+      <col style="width:min-content">
     </colgroup>
 
     <tr>
@@ -36,14 +41,14 @@
     <!-- entries here -->
     {% for s in subjects %}
       <tr>
-        <td></td>
+        <td class="icon {{s.reason}}" style="text-align:center"></td>
         <td style="border-right:none">{{s.name}}</td>
         <td style="border-left:none">
           {% if s.reason %}
             <span class="reason">{{s.reason}}</span>
           {% endif %}
         </td>
-        <td>{{s.date}}</td>
+        <td style="text-align:right">{{s.date}}</td>
       </tr>
     {% endfor %}
   </table>

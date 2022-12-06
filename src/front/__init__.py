@@ -4,6 +4,7 @@ from django.conf import settings
 
 from traceback import print_tb
 from .. import log
+from ..magister.session import NotAuthenticatedException
 
 def root_page(request: HttpRequest):
     # if logged in: redirect to home page
@@ -47,6 +48,10 @@ def with_error_message(message: str):
             except Exception as e:
                 name = e.__class__.__name__
                 log.error(f"an exception occurred: {name}")
+
+                if e.__class__ == NotAuthenticatedException:
+                    new_message = "Kon niet authenticeren met Magister."
+                    return render_error(request, new_message, name)
 
                 if settings.DEBUG:
                     print(e)
