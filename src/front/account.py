@@ -59,7 +59,7 @@ def login_page(request: HttpRequest) -> HttpResponse:
 
     return LoginView.as_view(
         template_name = "account/login.html",
-        authentication_form=LoginForm
+        authentication_form = LoginForm
     )(request)
 
 @login_required

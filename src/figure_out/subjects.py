@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from ..magister import MagisterSession
 from ..magister.data import *
 
-DAYS_AHEAD = 70 # 10 weeks
+DAYS_AHEAD = 40 # 4 weeks
 
 # type alias
 class AppsList(List[AppointmentData]): pass
@@ -44,7 +44,7 @@ def find_tests(apps: AppsList) -> AppsList:
     return found
 
 def subjects(session: MagisterSession) -> List[Subject]:
-    start = dt.now()
+    start = dt.now() + timedelta(days=1)
     end = start + timedelta(days=DAYS_AHEAD)
 
     apps = session.get_appointments(start, end)

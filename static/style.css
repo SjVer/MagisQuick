@@ -89,9 +89,13 @@ input, input:focus, input:focus-visible, input:focus-within {
   line-height: 1.5rem;
   box-sizing: border-box;
   display: block;
+
 }
 input::-webkit-input-placeholder {
   color: rgb(70, 70, 70);
+}
+input:-webkit-autofill::first-line {
+  font-size: var(--normal-font-size);
 }
 
 button {

@@ -21,7 +21,11 @@
   </style>
   
   <h1>Boekenoverzicht</h1>
-  <h3>Deze boeken moet je {{date}} mee naar huis nemen.</h3>
+  <!-- <h3>Deze boeken moet je {{date}} mee naar huis nemen.</h3> -->
+  <h3>
+    De boeken voor deze vakken moet
+    je vanmiddag mee naar huis nemen.
+  </h3>
 
   <table style="width:var(--big-width)">
     <colgroup>
@@ -44,11 +48,11 @@
         <td class="icon {{s.reason}}" style="text-align:center"></td>
         <td style="border-right:none">{{s.name}}</td>
         <td style="border-left:none">
-          {% if s.reason %}
+          {% if s.reason != "les" %}
             <span class="reason">{{s.reason}}</span>
           {% endif %}
         </td>
-        <td style="text-align:right">{{s.date}}</td>
+        <td style="text-align:right;width:60pt">{{s.date}}</td>
       </tr>
     {% endfor %}
   </table>
