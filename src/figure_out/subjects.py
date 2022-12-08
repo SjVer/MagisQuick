@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from ..magister import MagisterSession
 from ..magister.data import *
 
-DAYS_AHEAD = 40 # 4 weeks
+DAYS_AHEAD = 70 # 4 weeks
 
 # type alias
 class AppsList(List[AppointmentData]): pass

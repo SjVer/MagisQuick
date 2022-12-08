@@ -7,11 +7,6 @@ from .api import get_tenant_id
 from .data import *
 from . import auth
 
-__all__ = [
-	"UserInfo",
-	"MagisterSession"
-]
-
 class NotAuthenticatedException(Exception): pass
 
 class MagisterSession:
@@ -70,7 +65,9 @@ class MagisterSession:
 				self.__authenticated = False
 				return
 
-			# get tenant (thanks sjoerd :))! )
+			# we have no way of getting the tenant ourselves, but we can
+			# bypass cors and get the tenant through the host link.
+			# It's weird but it works.
 			self.user.tenant = get(
 				None, self.tokenset.access_token,
 				"https://cors.sjoerd.dev/https://magister.net/.well-known/host-meta.json"
@@ -84,6 +81,8 @@ class MagisterSession:
 			log.info(f"session authenticated (tenant: {self.user.tenant})")
 
 	def end_session(self):
+		# notifies the magister server that 
+		# this session is done
 		auth.end_session(self.tokenset.id_token)
 		self.__authenticated = False
 		log.info("session ended")
@@ -154,7 +153,9 @@ class MagisterSession:
 			self.user.last_name,
 		]: self.update_userinfo()
 	
-	# {tenant}.magister.net/api/personen/{id}
+	# just a handy function that returns the formatted
+	# account url which is needed for e.g. appointments.
+	# format: {tenant}.magister.net/api/personen/{account id}
 	def account_api_url(self) -> str:
 		self.require_credentials()
 		return str.format(

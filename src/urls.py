@@ -22,6 +22,7 @@ from .front import root_page, error_page
 from .front.account import login_page, logout_page, delete_user
 from .front.views.account import account_page
 from .front.views.boeken import boeken_page
+from .front.views.grades import grades_page
 
 urlpatterns = [
     path("admin/login/", login_page),
@@ -38,4 +39,5 @@ urlpatterns = [
     path("", root_page),
     path("account/", account_page),
     path("boeken/", boeken_page),
+    path("cijfers/", grades_page),
 ]

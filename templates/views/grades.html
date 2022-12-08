@@ -1,0 +1,22 @@
+{% extends "views/viewbase.html" %}
+{% load static %}
+{% block viewcontent %}
+
+<!-- for plotting -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.min.js"
+  type="module">
+</script>
+
+<div>
+  <h1>{{title}}</h1>
+  <h3>
+    TODO
+  </h3>
+
+  <div style="width:80%"><canvas id="grades_chart"></canvas></div>
+  <script type="module" src="{% static 'grades.js' %}"></script>
+
+</div>
+
+{% endblock %}

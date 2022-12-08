@@ -30,26 +30,6 @@ challenge_args, verifier = client.add_code_challenge()
 def extract_param(url, param):
     return url.split(f"{param}=", 1)[1].split("&", 1)[0]
 
-# The authcode needed for challenges can be found in account-<...>.js
-# which is requested by magister when starting to log in (/account/login).
-#
-# The authcode can be found in the js source code just after `(o=["` (I think)
-# and is "encoded" as follows: There are two arrays separated by a comma. The
-# first array contains strings and the second contains the indices of the first
-# array. Concatenating the strings at those indices results in the authcode.
-# For example: `["X", "Y", "Z"],["2", "0"]` becomes "ZX". Not very safe eh?
-# 
-# This is an example of the relevant source code:
-# ```js
-#   r[zi[0]]=(
-#     o = ["2832a884", "314d", "201413", "4161"]),
-#     ["2", "3"].map(function (t) {
-#       return o[parseInt(t) || 0];
-#    }
-#  ).join("");
-# // becomes "2014134161"
-# ```
-#
 # Previous:
 #   6-12-'22: `["2832a884","314d","201413","4161"],["2","3"]` -> "2014134161"
 #   7-12-'22: 

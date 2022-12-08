@@ -20,4 +20,5 @@ a.icon {
 .icon.magister::before {content: "Q"}
 .icon.person::before {content: "d"}
 .icon.pencil::before {content: "?"}
+.icon.grade::before {content: "U"}
 .icon.exit::before {content: "P"}
