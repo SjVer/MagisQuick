@@ -9,7 +9,7 @@ WARNING = 1
 INFO = 2
 DEBUG = 3
 
-LOG_FILE = f"logs/log-{dt.now().strftime('%d-%m-%Y')}.txt"
+LOG_FILE = f"logs/log-{dt.today().strftime('%d-%m-%Y')}.txt"
 
 if settings.DEBUG:
     __log_level =  DEBUG
@@ -32,7 +32,7 @@ def log(level, msg):
         ("DEBUG  ", "green"),
     ][level]
     
-    time = dt.now().strftime("%H:%M:%S")
+    time = dt.today().strftime("%H:%M:%S")
     if __to_stdout:
         entry = tc.colored(f"[{level_string} - {time}] {msg}\n", color)
     else:

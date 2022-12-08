@@ -21,6 +21,6 @@ def boeken_page(request: HttpRequest):
 		"settings": settings,
 		"title": "Boeken",
 		"full_name": session.user.get_full_name(),
-		"date": datetime.now().strftime("%A %-d %B"),
+		"date": datetime.today().strftime("%A %-d %B"),
 		"subjects": subjects,
 	})

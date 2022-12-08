@@ -36,7 +36,7 @@ def extract_param(url, param):
 
 def get_challenge_authcode(session_id, return_url):
     # try to use old code first
-    if cache.get("challenge_auth_code_date") == dt.now().date():
+    if cache.get("challenge_auth_code_date") == dt.today().date():
         old_code = cache.get("challenge_auth_code")
         log.debug(f"  challenge auth code: {old_code} (cached)")
         return old_code
@@ -67,7 +67,7 @@ def get_challenge_authcode(session_id, return_url):
     
     # store code to cache and return
     cache.set("challenge_auth_code", auth_code)
-    cache.set("challenge_auth_code_date", dt.now().date()) 
+    cache.set("challenge_auth_code_date", dt.today().date()) 
     log.debug(f"  challenge auth code: {auth_code}")
     return auth_code
 

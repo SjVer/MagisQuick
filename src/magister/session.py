@@ -168,8 +168,8 @@ class MagisterSession:
 	def get_appointments(self, start: dt, end: dt) -> List[AppointmentData]:
 		self.__assert_authenticated("get_appointments")
 
-		start = start.strftime("%Y-%m-%d")
-		end = end.strftime("%Y-%m-%d")
+		start = start.date()
+		end = end.date()
 		log.info(f"getting appointments from {start} to {end}")
 
 		apps = get(
@@ -181,3 +181,34 @@ class MagisterSession:
 			app["InfoType"] = AppInfoType(app["InfoType"])
 
 		return apps
+		
+	# get grades
+	def get_grades(self) -> List[GradeData]:
+		self.__assert_authenticated("get_grades")
+		log.info(f"getting grades")
+		
+		# first we need the course id
+		date = dt.today().date()
+		courses = get(
+			self.user.tenant, self.tokenset.access_token,
+			self.account_api_url() + f"aanmeldingen/"
+		).json()["Items"]
+
+		# no need to check for no-matching-course
+		for c in courses:
+			start = c["Start"].split("T", 1)[0]
+			end = c["Einde"].split("T", 1)[0]
+			if start <= str(date) and str(date) <= end:
+				course_id = c["Id"]
+				break
+		log.debug(f"  course id: {course_id}")
+		
+		grades = get(
+			self.user.tenant, self.tokenset.access_token,
+			self.account_api_url() + \
+				f"aanmeldingen/{course_id}/cijfers/cijferoverzichtvooraanmelding"\
+				"?actievePerioden=true&alleenBerekendeKolommen=false&alleenPTAKolommen=false"
+		).json()["Items"]
+
+		# TODO: get extra info via cijfers/extracijferkolominfo/{grade id}
+		return grades

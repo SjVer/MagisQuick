@@ -30,3 +30,11 @@ class AppointmentData(TypedDict):
     Omschrijving: str
     Start: str
     Vakken: list # Naam: str
+
+class GradeData(TypedDict):
+    CijferId: int
+    CijferStr: str
+    IsVoldoende: bool
+    DatumIngevoerd: str
+    TeltMee: bool
+    Vask: dict

@@ -44,7 +44,7 @@ def find_tests(apps: AppsList) -> AppsList:
     return found
 
 def subjects(session: MagisterSession) -> List[Subject]:
-    start = dt.now() + timedelta(days=1)
+    start = dt.today() + timedelta(days=1)
     end = start + timedelta(days=DAYS_AHEAD)
 
     apps = session.get_appointments(start, end)

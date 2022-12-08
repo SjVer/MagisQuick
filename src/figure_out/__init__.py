@@ -1,1 +1,2 @@
-from .subjects import subjects
+from .subjects import *
+from .grades import *
