@@ -6,5 +6,4 @@ src/front/__pycache__
 src/front/views/__pycache__
 
 logs/
-db.sqlite3
 venv/
