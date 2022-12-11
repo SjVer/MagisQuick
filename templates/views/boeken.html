@@ -1,25 +1,25 @@
 {% extends "views/viewbase.html" %}
 {% block viewcontent %}
 
-<div>
-  <style>
-    .reason {
-      float: right;
-      color: white;
-      font-size: var(--normal-font-size);
-      padding: var(--small-px);
-      border-radius: var(--small-px);
-      background-color: var(--ternary-background);
-    }
+<style>
+  .reason {
+    float: right;
+    color: white;
+    font-size: var(--normal-font-size);
+    padding: var(--small-px);
+    border-radius: var(--small-px);
+    background-color: var(--ternary-background);
+  }
 
-    .icon.proefwerk::before {content: "o"}
-    .icon.mondeling::before {content: "p"}
-    .icon.huiswerk::before {content: "Y"}
-    .icon.les::before {content: "a"}
-    .icon.SO::before {content: "o"}
-    .icon.SE::before {content: "o"}
-  </style>
-  
+  .icon.proefwerk::before {content: "o"}
+  .icon.mondeling::before {content: "p"}
+  .icon.huiswerk::before {content: "Y"}
+  .icon.les::before {content: "a"}
+  .icon.SO::before {content: "o"}
+  .icon.SE::before {content: "o"}
+</style>
+
+<div style="width:85%">
   <h1>{{title}}</h1>
   <!-- <h3>Deze boeken moet je {{date}} mee naar huis nemen.</h3> -->
   <h3>

@@ -211,4 +211,6 @@ class MagisterSession:
 		).json()["Items"]
 
 		# TODO: get extra info via cijfers/extracijferkolominfo/{grade id}
+
+		log.debug(f"  retreived {len(grades)} grades")
 		return grades

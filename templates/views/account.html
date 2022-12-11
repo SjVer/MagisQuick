@@ -1,45 +1,45 @@
 {% extends "views/viewbase.html" %}
 {% block viewcontent %}
 
+<style>
+  .entry {
+    display: block;
+    margin: 5px 0px;
+    max-width: fit-content;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+    break-after: page;
+  }
+
+  .link {
+    color: var(--secondary-background);
+    text-decoration: underline;
+  }
+  /* .link::before {
+    font-family: magisterIcons;
+    content: "Q ";
+  } */
+
+  .indented {
+    margin-left: 10px;
+    max-width: var(--big-width);
+  }
+
+  #cplbl {
+    color: var(--primary-background);
+    -webkit-transition: opacity 2s, visibility 2s;
+    transition: opacity 2s, visibility 2s;
+  }
+
+  #rusure:not([hidden]) {
+    display: block;
+    width: fit-content;
+    margin-bottom: 10px;
+  }
+</style>
+
 <div>
-  <style>
-    .entry {
-      display: block;
-      margin: 5px 0px;
-      max-width: fit-content;
-      word-break: break-all;
-      overflow: hidden;
-      white-space: nowrap;
-      break-after: page;
-    }
-
-    .link {
-      color: var(--secondary-background);
-      text-decoration: underline;
-    }
-    /* .link::before {
-      font-family: magisterIcons;
-      content: "Q ";
-    } */
-
-    .indented {
-      margin-left: 10px;
-      max-width: var(--big-width);
-    }
-
-    #cplbl {
-      color: var(--primary-background);
-      -webkit-transition: opacity 2s, visibility 2s;
-      transition: opacity 2s, visibility 2s;
-    }
-
-    #rusure:not([hidden]) {
-      display: block;
-      width: fit-content;
-      margin-bottom: 10px;
-    }
-  </style>
-  
   <h1>{{title}}</h1>
   
   <h3 class="bold">Persoonlijke gegevens</h3>

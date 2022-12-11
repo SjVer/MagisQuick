@@ -1,0 +1,108 @@
+{% extends "views/viewbase.html" %}
+{% load static %}
+{% block viewcontent %}
+
+<style>
+  .chart {
+    height: var(--medium-width);
+    max-width: 700px;
+  }
+</style>
+
+<div style="width:85%">
+  <h1>{{title}}</h1>
+  <h3>Je behaalde cijfers van {{first_date_f}} tot {{last_date_f}}</h3>
+  
+  Kies een vak:
+  <select id="subject" onchange="drawChart()">
+    {% for subject in subjects %}
+      <option>{{subject}}</option>
+    {% endfor %}
+  </select>
+  
+  <div class="chart" style="margin:10px 0px" id="grades_chart"></div>
+  (Klik op de grafiek om details te zien)
+  
+  <script>
+    const fDate = (str) => new Date(str).toLocaleDateString();
+
+    // data
+    const data = {
+      // {% for subject, grades in grades.items %}
+      "{{subject}}": [
+        // {% for grade in grades %}
+        [fDate("{{grade.date}}"), {{grade.grade}}, {{grade.grade}}, 5, 3, 2],
+        // {% endfor %}
+      ],
+      // {% endfor %}
+    };
+    console.log(data);
+
+    const options = {
+      theme: "maximized",
+      isStacked: true,
+      chartArea: {
+        left: 0,
+        top: 0,
+        width: "100%",
+        height: "100%",
+      },
+      legend: { position: "none" },
+      hAxis: { textPosition: "none" },
+      vAxis: { ticks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+      series: {
+        0: {
+          curveType: "function",
+          color: "#016695",
+          enableInteractivity: false
+        },
+        1: {
+          color: "#0683ea",
+          enableInteractivity: true
+        },
+        2: {
+          color: "red",
+          lineWidth: 0,
+          type: 'area',
+          enableInteractivity: false
+        },
+        3: {
+          color: "lightblue",
+          lineWidth: 0,
+          type: 'area',
+          enableInteractivity: false
+        },
+        4: {
+          color: "green",
+          lineWidth: 0,
+          type: 'area',
+          enableInteractivity: false
+        }
+      }
+    };
+    const div = document.getElementById("grades_chart");
+    
+    // load api
+    google.charts.load("current", { "packages": ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // draw graph
+    function drawChart() {
+      var grades = data[$("#subject").find(":selected").text()];
+
+      var table = new google.visualization.DataTable();
+      table.addColumn("string", "Datum");
+      table.addColumn("number", "Cijfer");
+      table.addColumn("number", "Cijfer");
+      table.addColumn("number", "Onvoldoende");
+      table.addColumn("number", "Voldoende");
+      table.addColumn("number", "Goed");
+      table.addRows(grades);
+      table.sort([{column: 0}]);
+      var chart = new google.visualization.LineChart(div);
+      chart.draw(table, options);
+    }
+  </script>
+</div>
+
+{% endblock %}

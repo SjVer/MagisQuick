@@ -15,10 +15,17 @@ a.icon {
   text-decoration: none;
 }
 
-.icon.books::before {content: "a"}
-.icon.calendar::before {content: "S"}
-.icon.magister::before {content: "Q"}
+.icon.setting::before {content: "-"}
 .icon.person::before {content: "d"}
-.icon.pencil::before {content: "?"}
+.icon.books::before {content: "a"}
 .icon.grade::before {content: "U"}
+.icon.graph::before {content: "K"}
 .icon.exit::before {content: "P"}
+
+.icon.calculator {
+  width: 23px;
+  content: url("/static/icon-calculator.png");
+}
+@media (max-width: 500px) {
+  .icon.calculator { width: 15px }
+}

@@ -32,7 +32,7 @@ def extract_param(url, param):
 
 # Previous:
 #   6-12-'22: `["2832a884","314d","201413","4161"],["2","3"]` -> "2014134161"
-#   7-12-'22: 
+#   7-12-'22: `["5a00","82c3442f","f650","f856"],["2","2"]` -> "f650f650" 
 
 def get_challenge_authcode(session_id, return_url):
     # try to use old code first

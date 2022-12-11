@@ -21,9 +21,11 @@
   --medium-px: 10px;
   --large-px: 30px;
   --sorta-medium-px: 30px;
-
-  --big-width: 80%;
+  
+  --big-width: 600px;
   --medium-width: 40%;
+
+  --icon-png-width: 22px;
 }
 
 /* overrides for mobile */
@@ -37,6 +39,10 @@
   --medium-px: 6px;
   --large-px: 15px;
   --sorta-medium-px: 10px;
+
+  --big-width: 80%;
+
+  --icon-png-width: 5px;
 }
 }
 

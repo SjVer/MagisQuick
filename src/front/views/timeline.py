@@ -10,25 +10,26 @@ from ...magister import get_session
 from ... import figure_out
 
 @login_required
-@via_loading_page("Cijfers")
+@via_loading_page("Tijdlijn")
 @with_error_message("De cijfers konden niet geladen worden.")
-def grades_page(request: HttpRequest):
+def timeline_page(request: HttpRequest):
 	session = get_session(request)
 	session.require_userinfo()
 
-	averages = figure_out.averages(session)
+	grades = figure_out.grades(session)
 
 	dates = []
-	for _, gs in averages.items():
-		dates += [g.date for g in gs]
+	for _, gs in grades.items(): dates += [g.date for g in gs]
 	dates = sorted(dates)
 	fmtdate = lambda d: dt.fromisoformat(d).strftime("%-d %b. %Y")
 
-	return render(request, "views/grades.html", {
+	return render(request, "views/tijdlijn.html", {
 		"settings": settings,
-		"title": "Cijfers",
-		"first_date": fmtdate(dates[0]),
-		"last_date": fmtdate(dates[-1]),
-		"subjects": list(averages.keys()),
-		"averages": averages,
+		"title": "Tijdlijn",
+		"first_date": dates[0],
+		"last_date": dates[-1],
+		"first_date_f": fmtdate(dates[0]),
+		"last_date_f": fmtdate(dates[-1]),
+		"subjects": list(grades.keys()),
+		"grades": grades,
 	})

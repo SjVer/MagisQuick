@@ -19,3 +19,8 @@ serve:
 
 browser:
 	sqlitebrowser db.sqlite3 &
+
+count-lines:
+	find src/ templates/ static/icons.css static/style.css Makefile \
+	 | xargs wc -l \
+	 || true

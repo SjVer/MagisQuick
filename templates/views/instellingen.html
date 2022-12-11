@@ -1,0 +1,125 @@
+{% extends "views/viewbase.html" %}
+{% block viewcontent %}
+
+<div>
+  <style>
+    .entry {
+      display: block;
+      margin: 5px 0px;
+      max-width: fit-content;
+      word-break: break-all;
+      overflow: hidden;
+      white-space: nowrap;
+      break-after: page;
+    }
+
+    .link {
+      color: var(--secondary-background);
+      text-decoration: underline;
+    }
+
+    .indented {
+      margin-left: 10px;
+      max-width: var(--big-width);
+    }
+
+    p { text-align: justify }
+  </style>
+  
+  <h1>{{title}}</h1>
+  
+  <h3 class="bold">Over MagisQuick</h3>
+  <div class="indented">
+    <p>
+      MagisQuick is dé tool om jouw luie leven als middelbare schoolleerling nog makkelijker te maken. Bekijk in één overzicht welke boeken je allemaal nodig hebt, welke cijfers je moet halen of welke cijfers je hebt gehaald. Welke toetsen krijg je binnenkort? Welke boeken heb je nodig voor het huiswerk? Ook dat zie je allemaal in MagisQuick. 
+    </p>
+    <p>
+      MagisQuick is gemaakt door leerlingen, voor leerlingen. Hoewel Magister ons het leven een stuk makkelijker maakt, kan Magister nog zeker niet alles. Om een bruggetje te slaan tussen de inhoud van de lessen en magister, hebben wij MagisQuick gemaakt. 
+    </p>
+    <p>
+      Wij zijn Sjoerd en Jeroen Vermeulen, twee VWO examenleerlingen die als profielwerkstuk deze tool gemaakt hebben.
+    </p>
+  </div>
+
+  <h3 class="bold">Contact</h3>
+  <div class="indented">
+    Email: <a href="mailto:magisquick@gmail.com">magisquick@gmail.com</a> <br>
+    Sjoerd Vermeulen: <a href="mailto:sjoerd@marsenaar.com">sjoerd@marsenaar.com</a> <br>
+    Jeroen Vermeulen: <a href="mailto:jeroenvob@gmail.com">jeroenvob@gmail.com</a> <br>
+  </div>
+
+  <h3 class="bold">Voorwaarden</h3>
+  <div class="indented">
+    <p>
+      Licentieovereenkomst voor eindgebruikers (EULA) van Magiscore
+      Deze licentieovereenkomst voor eindgebruikers ("EULA") is een wettelijke overeenkomst tussen u en MagisQuick. Door in te loggen of delen van de website te openen of te installeren en/of te gebruiken, bevestigt u uw acceptatie van de website en stemt u met deze EULA-overeenkomst in.
+    </p>
+    <p>
+      Deze EULA-overeenkomst is alleen van toepassing op MagisQuick, ongeacht of hierin naar andere software wordt verwezen of deze wordt beschreven. De voorwaarden zijn ook van toepassing op alle updates, aanvullingen en ondersteuningsdiensten voor MagisQuick. Dan zijn die voorwaarden van toepassing. 
+    </p>
+    <p>
+      Licentie verlenen <br>
+      Het is toegestaan om de MagisQuick (bijvoorbeeld een pc, laptop, mobiel of tablet) onder eigen gebruik te laden. U bent ervoor verantwoordelijk dat uw apparaat voldoet aan de minimale vereisten om MagisQuick te gebruiken.
+    </p>
+    <p>
+      Het is niet toegestaan om: <br>
+      MagisQuick te bewerken, wijzigen, wijzigen, aanpassen, vertalen of anderszins wijzigen, noch toestaan dat het geheel of een deel van MagisQuick wordt gecombineerd met of opgenomen wordt in enige andere software, noch decompileren, disassembleren of het reverse-engineeren van MagisQuick; <br>
+      De Software te reproduceren, kopiëren, distribueren, doorverkopen of anderszins gebruiken voor commerciële doeleinden; <br>
+      MagisQuick op een manier te gebruiken die in strijd is met toepasselijke lokale, nationale of internationale wetgeving; <br>
+      de Software te gebruiken voor enig doel dat volgens de makers van MagisQuick in strijd is met deze EULA-overeenkomst. <br>
+    </p>
+    <p>
+      Eigendom <br>
+      Sjoerd Vermeulen behoudt ten allen tijde het eigendom van MagisQuick zoals oorspronkelijk door u geopend. Sjoerd Vermeulen heeft als enige het recht om licenties voor het gebruik van MagisQuick aan derden te verlenen.
+    </p>
+    <p>
+      Beëindiging <br>
+      Deze EULA-overeenkomst is van kracht vanaf de datum waarop u MagisQuick voor het eerst gebruikt en loopt door totdat deze wordt beëindigd. Het wordt ook onmiddellijk beëindigd als u zich niet houdt aan enige voorwaarde van deze EULA-overeenkomst. Bij een dergelijke beëindiging worden de door deze EULA-overeenkomst verleende licenties onmiddellijk beëindigd en stemt u ermee in alle toegang tot en gebruik van MagisQuick stop te zetten. Deze EULA-overeenkomst en elk geschil dat voortvloeit uit of verband houdt met deze EULA-overeenkomst, wordt beheerst door en geïnterpreteerd in overeenstemming met de wetten van NL.
+    </p>
+    <p>
+      Andere EULA's <br>
+      Door deze software te gebruiken gaat u akkoord met de gebruiksvoorwaarden van Magister.
+    </p>
+  </div>  
+
+  <h3 class="bold">Privacybeleid</h3>
+  <div class="indented">
+    <p>
+      MagisQuick is geprogrammeerd door Sjoerd Vermeulen.  Deze dienst wordt kosteloos geleverd door Sjoerd.  Deze pagina wordt gebruikt om bezoekers te informeren over mijn beleid met betrekking tot het verzamelen, gebruiken en vrijgeven van persoonlijke informatie als iemand besluit MagisQuick te gebruiken.
+    </p>
+    <p>
+      Als u ervoor kiest om MagisQuick te gebruiken, gaat u akkoord met het verzamelen en gebruiken van informatie met betrekking tot dit beleid. De persoonlijke informatie die wordt verzameld, wordt gebruikt voor het leveren en verbeteren van MagisQuick. Deze informatie zal met niemand worden gebruikt of gedeelt, behalve zoals beschreven in dit privacybeleid.
+    </p>
+    <p>
+      Verzameling en gebruik van informatie <br>
+      Voor een betere ervaring tijdens het gebruik van MagisQuick, kan het zo zijn dat ik bepaalde persoonlijke gegevens van u in zie. De informatie die ik vraag, wordt op uw apparaat bewaard en wordt op geen enkele manier door mij verzameld. De persoonlijke gegevens worden opgeslagen voor een zo soepel mogelijke ervaring op het door u gebruikte apparaat. De opgeslagen persoonlijke gegevens bestaan uit uw school, volledige naam en gebruikersnaam, tijdstip van login, email address en het wachtwoordt van Magister.
+    </p>
+    <p>
+      Loggegevens <br>
+      In het geval van een fout in de app kan er gegevens en informatie worden verzameld op je telefoon genaamd Log Data. Deze loggegevens kunnen informatie bevatten zoals het Internet Protocol ("IP")-adres van uw apparaat, de naam van het apparaat, de versie van het besturingssysteem, de configuratie van de app bij gebruik van mijn MagisQuick, de tijd en datum van uw gebruik van MagisQuick en andere statistieken.
+    </p>
+    <p>
+      Cookies <br>
+      Cookies zijn bestanden met een kleine hoeveelheid gegevens die vaak worden gebruikt als anonieme unieke identificatiegegevens. Deze worden naar uw browser gestuurd vanaf de websites die u bezoekt en worden opgeslagen in het interne geheugen van uw apparaat. <br>
+      MagisQuick gebruikt deze "cookies" niet expliciet. De app kan echter wel cookies verzamelen van derden zoals Magister. U heeft de mogelijkheid om deze cookies te accepteren of te weigeren. Als u ervoor kiest om onze cookies te weigeren, kunt u sommige delen van MagisQuick mogelijk niet gebruiken.
+    </p>
+    <p>
+      Veiligheid <br>
+      Bij het gebruik van MagisQuick worden vanuit magister persoonlijke informatie opgevraagd. Wij waarderen u vertrouwen in het verstrekken hiervan. Maar vergeet niet dat geen enkele verzendmethode via internet of elektronische opslagmethode 100% veilig en betrouwbaar is, en we kan de absolute veiligheid ervan niet garanderen.
+    </p>
+    <p>
+      Wijzigingen in het privacybeleid <br>
+      Het privacybeleid kan over tijd veranderen. Daarom wordt u geadviseerd om deze pagina regelmatig te bekijken op eventuele wijzigingen. Wijzigingen van het privacybeleid zullen op deze pagina worden weergeven. Deze wijzigingen gaan onmiddellijk van kracht als ze op deze pagina worden geplaatst.
+    </p>
+    <p>
+      Neem contact met ons op <br>
+      Als u vragen of suggesties heeft over mijn privacybeleid, aarzel dan niet om contact met mij op te nemen via magisquick@gmail.com 
+    </p>
+
+    Dit privacybeleid is gemaakt met behulp van https://www.privacypolicytemplate.net/
+  </div>
+
+  <div style="height: 20px"></div>
+</div>
+
+{% endblock %}

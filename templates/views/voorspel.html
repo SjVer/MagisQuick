@@ -1,0 +1,37 @@
+{% extends "views/viewbase.html" %}
+{% load static %}
+{% block viewcontent %}
+
+<div style="width:85%">
+  <h1>{{title}}</h1>
+  <h3>Voorspel je toekomstige gemiddeldes en de cijfers die je moet halen.</h3>
+  
+  Kies een vak:
+  <select id="subject" onchange="changeSubject()">
+    {% for subject in subjects %}
+      <option>{{subject}}</option>
+    {% endfor %}
+  </select>
+
+  <p>Gemiddelde: <span id="average"></div></p>
+
+  <script>
+    // data
+    const data = {
+      // {% for subject, grade in averages.items %}
+      "{{subject}}": {{grade|safe}},
+      // {% endfor %}
+    };
+
+    var currentAverage = 0;
+
+    function changeSubject() {
+      var grades = data[$("#subject").find(":selected").text()];
+      $("#average").html(currentAverage);
+    }
+
+    changeSubject();
+  </script>
+</div>
+
+{% endblock %}

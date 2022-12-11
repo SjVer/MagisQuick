@@ -3,6 +3,7 @@ from django.http import HttpRequest
 from django.conf import settings
 
 from traceback import print_tb
+from inspect import trace
 from .. import log
 from ..magister.session import NotAuthenticatedException
 
@@ -54,10 +55,10 @@ def with_error_message(message: str):
                     return render_error(request, new_message, name)
 
                 if settings.DEBUG:
-                    print(e)
-                    try: print_tb(e)
-                    except: pass
-                    
+                    f = trace()[-1]
+                    log.error(f"{e}")
+                    log.error(f"at {f.filename}")
+                    log.error(f"{f.lineno}: `{f.code_context[0].strip()}`")
                 return render_error(request, message, name)
         return wrapped
     return decorated
