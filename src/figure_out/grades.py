@@ -9,6 +9,15 @@ class Grade:
     grade: float
     weight: int
 
+def cijfer_str_to_float(cijfer_str) -> float:
+    match cijfer_str.replace(",", "."):
+        case "G": actual_grade = "8"
+        case "V": actual_grade = "6"
+        case "O": actual_grade = "4"
+        case num: actual_grade = num
+    
+    return float(actual_grade)
+
 def grades(session: MagisterSession) -> Dict[str, List[Grade]]:
     # TODO: include grade weight
 
@@ -21,36 +30,37 @@ def grades(session: MagisterSession) -> Dict[str, List[Grade]]:
         if not g["CijferId"]: continue
         if g["CijferKolom"]["KolomSoort"] != 1: continue
 
-        # map alphabetical grades to numerical ones
-        match g["CijferStr"].replace(",", "."):
-            case "G": actual_grade = "8"
-            case "V": actual_grade = "6"
-            case "O": actual_grade = "4"
-            case num: actual_grade = num
-
         # sort them by subject
         subject = g["Vak"]["Afkorting"]
         if not subject in grades.keys():
             grades[subject] = []
 
+        if "KolomInfo" in g.keys():
+            weight = g["KolomInfo"]["Weging"]
+        else:
+            weight = None
+
         grades[subject].append(Grade(
             g["DatumIngevoerd"].split("T", 1)[0],
-            float(actual_grade),
-            1 # TODO
+            cijfer_str_to_float(g["CijferStr"]),
+            weight
         ))
     return grades
 
 def averages(session: MagisterSession) -> Dict[str, Grade]:
     avs = {}
 
-    for s, gs in grades(session).items():
+    # first sort by subject
+    for s, gs in session.get_averages().items():
         total = 0
         count = 0
 
         # calculate average
         for g in gs:
-            total += g.grade * g.weight
-            count += g.weight
+            grade = cijfer_str_to_float(g["Cijfer"])
+            total += grade * g["Weegfactor"]
+            count += g["Weegfactor"]
 
-        avs[s] = Grade(None, total, count) 
+        av = round(total / count, 1)
+        avs[s] = Grade(None, av, count) 
     return avs 

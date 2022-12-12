@@ -19,6 +19,9 @@ class MagisterSession:
 	
 	# cached info
 	__authenticated: bool
+	__grades: list
+	__averages: dict
+	__course_id: int
 	
 	def __init__(self, user: EUser):
 		self.user = user
@@ -27,6 +30,9 @@ class MagisterSession:
 		self.session_id = None
 
 		self.__authenticated = False
+		self.__grades = None
+		self.__course_id = None
+		self.__averages = None
 		
 	def __bool__(self):
 		return self.__authenticated
@@ -181,28 +187,49 @@ class MagisterSession:
 			app["InfoType"] = AppInfoType(app["InfoType"])
 
 		return apps
-		
-	# get grades
-	def get_grades(self) -> List[GradeData]:
-		self.__assert_authenticated("get_grades")
-		log.info(f"getting grades")
-		
-		# first we need the course id
+
+	# get the current course id
+	def get_course_id(self) -> int:
+		self.__assert_authenticated("get_course_id")
+
+		# return cached id if possible
+		if self.__course_id:
+			log.info(f"course id: {self.__course_id} (cached)")
+			return self.__course_id
+
 		date = dt.today().date()
+
+		# get all courses
 		courses = get(
 			self.user.tenant, self.tokenset.access_token,
 			self.account_api_url() + f"aanmeldingen/"
 		).json()["Items"]
 
+		# find current course (by date)
 		# no need to check for no-matching-course
 		for c in courses:
 			start = c["Start"].split("T", 1)[0]
 			end = c["Einde"].split("T", 1)[0]
 			if start <= str(date) and str(date) <= end:
-				course_id = c["Id"]
+				self.__course_id = c["Id"]
 				break
-		log.debug(f"  course id: {course_id}")
+
+		log.info(f"course id: {self.__course_id}")
+		return self.__course_id
+
+	# get grades
+	def get_grades(self) -> List[GradeData]:
+		self.__assert_authenticated("get_grades")
+		log.info(f"getting grades")
+
+		# return cached grades if we have them
+		if self.__grades:
+			log.debug(f"  returning {len(self.__grades)} cached grades")
+			return self.__grades
 		
+		course_id = self.get_course_id()
+		
+		# get the actual grades (all of them)
 		grades = get(
 			self.user.tenant, self.tokenset.access_token,
 			self.account_api_url() + \
@@ -210,7 +237,36 @@ class MagisterSession:
 				"?actievePerioden=true&alleenBerekendeKolommen=false&alleenPTAKolommen=false"
 		).json()["Items"]
 
-		# TODO: get extra info via cijfers/extracijferkolominfo/{grade id}
-
 		log.debug(f"  retreived {len(grades)} grades")
+		self.__grades = grades
 		return grades
+
+	# gets all averages
+	def get_averages(self) -> Dict[str, List[RelatedGradeData]]:
+		self.__assert_authenticated("get_averages")
+		log.info("getting averages")
+
+		# return cached grades if we have them
+		if self.__averages:
+			log.debug(f"  returning {len(self.__averages)} cached averages")
+			return self.__averages
+
+		averages = {}
+		for g in self.get_grades():
+			if g["CijferKolom"]["KolomSoort"] != 2: continue
+			id = g["CijferKolom"]["Id"]
+			
+			related = get(
+				self.user.tenant, self.tokenset.access_token,
+				self.account_api_url() + f"cijfers/gerelateerdekolommen/{id}"
+			).json()["Items"]
+
+			if not related: continue
+
+			subject = related[0]["CVak"]
+			if not subject in averages.keys(): averages[subject] = []
+			averages[subject] += related
+
+		log.debug(f"  retreived averages for {len(averages)} subjects")
+		self.__averages = averages
+		return averages

@@ -71,8 +71,7 @@ def subjects(session: MagisterSession) -> List[Subject]:
 
         dateparts = app["Start"].split("T", 1)[0].split("-")
         dateparts.reverse()
-        dateparts[-1] = "'" + dateparts[-1][2:]
-        date = "-".join(dateparts)
+        date = "/".join(dateparts[:2])
 
         subjects.append(Subject(
             app["Vakken"][0]["Naam"],

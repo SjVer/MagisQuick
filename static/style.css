@@ -39,11 +39,13 @@
   --medium-px: 6px;
   --large-px: 15px;
   --sorta-medium-px: 10px;
-
+  
   --big-width: 80%;
 
   --icon-png-width: 5px;
 }
+
+.desktop { display: none !important }
 }
 
 * {
@@ -89,14 +91,10 @@ input, input:focus, input:focus-visible, input:focus-within {
   font-family: var(--normal-font-family);
   -webkit-text-fill-color: var(--grey-color);
   -webkit-box-shadow: 0 0 0px 1000px white inset;
-  width: 100%;
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: var(--small-px) var(--medium-px);
   line-height: 1.5rem;
   box-sizing: border-box;
-  display: block;
-
 }
 input::-webkit-input-placeholder {
   color: rgb(70, 70, 70);
@@ -144,6 +142,12 @@ th, td {
   top: 45%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.big_input {
+  width: 100%;
+  display: block;
+  padding: var(--small-px) var(--medium-px);
 }
 
 .big_button {

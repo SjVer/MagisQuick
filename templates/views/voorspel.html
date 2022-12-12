@@ -2,20 +2,80 @@
 {% load static %}
 {% block viewcontent %}
 
+<style>
+  .indented {
+    margin-left: 10px;
+    max-width: var(--big-width);
+  }
+
+  input[type="number"] {
+    width: calc(var(--large-font-size)*1.3);
+  }
+</style>
+
 <div style="width:85%">
   <h1>{{title}}</h1>
-  <h3>Voorspel je toekomstige gemiddeldes en de cijfers die je moet halen.</h3>
+  <h3>Voorspel je gemiddeldes en de cijfers die je moet halen.</h3>
   
-  Kies een vak:
-  <select id="subject" onchange="changeSubject()">
-    {% for subject in subjects %}
+  <div class="indented">
+    Kies een vak:
+    <select id="subject" onchange="changeSubject()">
+      {% for subject in subjects %}
       <option>{{subject}}</option>
-    {% endfor %}
-  </select>
+      {% endfor %}
+    </select>
+    
+    <p>Gemiddelde: <span id="average"></span></p>
+  </div>
 
-  <p>Gemiddelde: <span id="average"></div></p>
+  <h3 class="bold">Wat je moet halen</h3>
+  <div class="indented">
+    <p>
+      Gewenste gemiddelde:
+      <input id="wanted_average"
+        type="number" min="0" max="10" step="0.1" value="7.0"
+        onchange="roundInput(this, 1); calculateNeededGrade();"
+      />
+    </p>
+    <p>
+      Weging:
+      <input id="wanted_weight"
+        type="number" min="0" max="10" step="1" value="1"
+        onchange="roundInput(this, 0); calculateNeededGrade();"
+      />
+    </p>
+    <p>Cijfer nodig: <span id="grade_needed"></span></p>
+  </div>
+
+  <h3 class="bold">Wat je gaat staan</h3>
+  <div class="indented">
+    <p>
+      Voorspelde cijfer:
+      <input id="new_grade"
+        type="number" min="0" max="10" step="0.1" value="7"
+        onchange="roundInput(this, 1); calculateNewGrade();"
+      />
+    </p>
+    <p>
+      Weging:
+      <input id="new_weight"
+        type="number" min="0" max="10" step="1" value="1"
+        onchange="roundInput(this, 0); calculateNewGrade();"
+      />
+    </p>
+    <p>Nieuwe gemiddelde: <span id="new_average"></span></p>
+  </div>
 
   <script>
+    function roundInput(el, p) {
+      let v = parseFloat(el.value);
+      if (v.toFixed(0) == v) {
+        el.value = v.toFixed(0);
+      } else {
+        el.value = v.toFixed(p);
+      }
+    }
+
     // data
     const data = {
       // {% for subject, grade in averages.items %}
@@ -23,11 +83,51 @@
       // {% endfor %}
     };
 
-    var currentAverage = 0;
+    // current average
+    var cAvrg = {};
 
     function changeSubject() {
-      var grades = data[$("#subject").find(":selected").text()];
-      $("#average").html(currentAverage);
+      var grade = data[$("#subject").find(":selected").text()];
+      cAvrg = grade;
+      $("#average").html(grade.grade);
+
+      calculateNeededGrade();
+      calculateNewGrade();
+    }
+
+    function calculateNeededGrade() {
+      let w_average = parseFloat($("#wanted_average").val());
+      let w_weight = parseFloat($("#wanted_weight").val());
+      
+      let t_weight = cAvrg.weight + w_weight;
+      let t_average = cAvrg.weight * cAvrg.grade;
+      let grade_needed = ((t_weight * w_average) - t_average) / w_weight;
+      
+      let prec = grade_needed.toFixed(0) == grade_needed ? 0 : 1;
+      if (grade_needed > 10) {
+        $("#grade_needed").html("Onmogelijk!");
+      } else if (grade_needed < 0) {
+        $("#grade_needed").html(0);
+      } else {
+        $("#grade_needed").html(grade_needed.toFixed(prec));
+      }
+    }
+    
+    function calculateNewGrade() {
+      let n_grade = parseFloat($("#new_grade").val());
+      let n_weight = parseFloat($("#new_weight").val());
+      
+      let t_average = cAvrg.weight * cAvrg.grade;
+      let new_average = (t_average + n_weight * n_grade) / (cAvrg.weight + n_weight);
+      
+      let prec = new_average.toFixed(0) == new_average ? 0 : 1;
+      if (new_average > 10) {
+        $("#new_average").html(10);
+      } else if (grade_needed < 0) {
+        $("#new_average").html(0);
+      } else {
+        $("#new_average").html(new_average.toFixed(prec));
+      }
     }
 
     changeSubject();

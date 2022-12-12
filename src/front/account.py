@@ -16,17 +16,24 @@ class LoginForm(AuthenticationForm):
     school = CharField(
         widget=TextInput(attrs={
             "placeholder": "Je School",
-            "list": "schools-list"
+            "list": "schools-list",
+            "class": "big_input",
         }),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update(
-            {"placeholder": "Je Gebruikersnaam"}
+            {
+                "class": "big_input",
+                "placeholder": "Je Gebruikersnaam"
+            }
         )
         self.fields['password'].widget.attrs.update(
-            {"placeholder": "Je Wachtwoord"}
+            {
+                "class": "big_input",
+                "placeholder": "Je Wachtwoord"
+            }
         )
 
     def clean(self):

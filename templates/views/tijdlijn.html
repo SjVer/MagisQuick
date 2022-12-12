@@ -31,12 +31,11 @@
       // {% for subject, grades in grades.items %}
       "{{subject}}": [
         // {% for grade in grades %}
-        [fDate("{{grade.date}}"), {{grade.grade}}, {{grade.grade}}, 5, 3, 2],
+        [fDate("{{grade.date}}"), {{grade.grade|safe}}, {{grade.grade|safe}}, 5, 3, 2],
         // {% endfor %}
       ],
       // {% endfor %}
     };
-    console.log(data);
 
     const options = {
       theme: "maximized",

@@ -23,9 +23,9 @@ a.icon {
 .icon.exit::before {content: "P"}
 
 .icon.calculator {
-  width: 23px;
+  height: 22px;
   content: url("/static/icon-calculator.png");
 }
 @media (max-width: 500px) {
-  .icon.calculator { width: 15px }
+  .icon.calculator { height: 15px }
 }

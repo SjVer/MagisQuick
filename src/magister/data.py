@@ -37,4 +37,8 @@ class GradeData(TypedDict):
     IsVoldoende: bool
     DatumIngevoerd: str
     TeltMee: bool
-    Vask: dict
+    Vak: dict
+
+class RelatedGradeData(TypedDict):
+    Cijfer: str
+    Weegfactor: int
