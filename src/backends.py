@@ -1,6 +1,6 @@
 from django.contrib.auth import backends, get_user_model
 
-from .magister import get_session
+from .magister import MagisterSession, set_current_session
 from . import log
 
 UserModel = get_user_model()
@@ -16,22 +16,32 @@ class EBackend(backends.ModelBackend):
             user = UserModel._default_manager.get_by_natural_key(username, school)
         except UserModel.DoesNotExist:
             user = UserModel._default_manager.create_user(school, username, password)
+            user.save()
 
-            # use get_session to check if the credentials
-            # are also OK with magister and set the current
-            # session if it is (so we don't need to auth
-            # again as soon as we enter another page)
-            class FakeRequest: pass
-            r = FakeRequest()
-            r.user = user
+            # check if the credentials are also OK with
+            # magister and set the current session if
+            # it is (so we don't need to auth again as
+            # soon as we enter another page)
             try:
-                assert get_session(r)
+                log.info("checking new user authentication")
+                session = MagisterSession(user)
+                session.authenticate()
+                assert session.__MagisterSession_authenticated
+                set_current_session(session)
             except Exception:
+                log.info("authentication failed, deleting new user")
                 user.delete()
+                user = None
                 return
 
-            log.info(f"creating valid new user {username} ({school})")
+            log.info(f"created valid new user {username} ({school})")
         finally:
-            if user.check_password(password) and self.user_can_authenticate(user):
+            if not user is None and user.check_password(password) and self.user_can_authenticate(user):
                 return user
         
+    def get_user(self, user_id):
+        try:
+            user = UserModel._default_manager.get(pk=user_id)
+        except UserModel.DoesNotExist:
+            return None
+        return user if self.user_can_authenticate(user) else None

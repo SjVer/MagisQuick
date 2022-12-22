@@ -38,8 +38,12 @@ def get_challenge_authcode(session_id, return_url):
     # try to use old code first
     if cache.get("challenge_auth_code_date") == dt.today().date():
         old_code = cache.get("challenge_auth_code")
-        log.debug(f"  challenge auth code: {old_code} (cached)")
-        return old_code
+        if old_code:
+            log.debug(f"  challenge auth code: {old_code} (cached)")
+            return old_code
+
+    cache.delete("challenge_auth_code")
+    cache.delete("challenge_auth_code_date")
 
     # get html of login redirect page
     r = get(
@@ -154,8 +158,12 @@ def authenticate(tenant_id, username, password) -> TokenSet:
             log.debug(f"  authorization code: {code[:10]}...")
             return get_tokenset(code)
         except Exception as e:
-            cache.delete("challenge_auth_code")
             log.error(f"failed to authenticate ({e.__class__.__name__})")
+            log.debug(f"  {e}")
+            # delete cached stuff just in case they're the issue
+            cache.delete("challenge_auth_code")
+            cache.delete("challenge_auth_code_date")
+    return None
 
 # get tokenset using refresh token
 def refresh(refresh_token) -> TokenSet:

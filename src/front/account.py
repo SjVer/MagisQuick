@@ -54,7 +54,9 @@ class LoginForm(AuthenticationForm):
                 password=password
             )
             if self.user_cache is None:
-                raise self.get_invalid_login_error()
+                e = self.get_invalid_login_error()
+                self.add_error(None, e)
+                raise e
             else:
                 self.confirm_login_allowed(self.user_cache)
 
