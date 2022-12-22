@@ -35,7 +35,7 @@
 /* overrides for mobile */
 @media (max-width: 500px) {
 :root {
-  --normal-font-size: 20px;
+  --normal-font-size: 200px;
   --medium-font-size: 30px;
   --large-font-size: 50px;
 
