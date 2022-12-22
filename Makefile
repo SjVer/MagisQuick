@@ -13,6 +13,10 @@ migrate:
 freeze:
 	python -m pip freeze > requirements.txt
 
+collect:
+	rm -r static/
+	python manage.py collectstatic
+
 serve:
 	clear -x
 	python manage.py runserver
