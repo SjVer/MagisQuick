@@ -36,12 +36,12 @@
 @media (max-width: 500px) {
 :root {
   --normal-font-size: 15px;
-  --medium-font-size: 30px;
+  --medium-font-size: 20px;
   --large-font-size: 50px;
 
   --small-px: 3px;
   --medium-px: 15px;
-  --large-px: 15px;
+  --large-px: 20px;
   --sorta-medium-px: 20px;
 
   --big-width: 100%;
