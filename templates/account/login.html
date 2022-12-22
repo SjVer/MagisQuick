@@ -29,28 +29,30 @@
 <script>
   var busy = false;
 
-  $("#id_school").on("input", () => {
-    if(busy) return;
-    
-    busy = true;
-    query = encodeURI($("#id_school").val());
-
-    $.ajax({
-      url: "../api/search_tenants",
-      method: "GET",
-      data: { "query": query },
+  $(function () => {
+    $("#id_school").on("input", () => {
+      if(busy) return;
       
-      success: (data) => {
-        let list = document.getElementById("schools-list");
-        list.innerHTML = "";
+      busy = true;
+      query = encodeURI($("#id_school").val());
 
-        for(i in data) {
-          list.appendChild(
-            new Option(value = data[i])
-          );
-        }
-        busy = false;
-      },
+      $.ajax({
+        url: "../api/search_tenants",
+        method: "GET",
+        data: { "query": query },
+        
+        success: (data) => {
+          let list = document.getElementById("schools-list");
+          list.innerHTML = "";
+
+          for(i in data) {
+            list.appendChild(
+              new Option(value = data[i])
+            );
+          }
+          busy = false;
+        },
+      });
     });
   });
 </script>
