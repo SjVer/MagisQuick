@@ -35,7 +35,7 @@
 /* overrides for mobile */
 @media (max-width: 500px) {
 :root {
-  /* --normal-font-size: 20px;
+  --normal-font-size: 20px;
   --medium-font-size: 30px;
   --large-font-size: 50px;
 
@@ -46,7 +46,7 @@
   
   --big-width: 80%;
 
-  --icon-png-width: 5px; */
+  --icon-png-width: 5px;
 }
 
 .desktop { display: none !important }
