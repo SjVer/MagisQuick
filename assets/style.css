@@ -28,12 +28,16 @@
   --icon-png-width: 22px;
 }
 
+@media not (max-width: 500px) {
+  .mobile { display: none !important }
+}
+
 /* overrides for mobile */
 @media (max-width: 500px) {
 :root {
-  --normal-font-size: 10px;
-  --medium-font-size: 15px;
-  --large-font-size: 25px;
+  --normal-font-size: 20px;
+  --medium-font-size: 30px;
+  --large-font-size: 50px;
 
   --small-px: 3px;
   --medium-px: 6px;
@@ -99,7 +103,7 @@ input, input:focus, input:focus-visible, input:focus-within {
 input::-webkit-input-placeholder {
   color: rgb(70, 70, 70);
 }
-input:-webkit-autofill::first-line {
+input:-webkit-autofill {
   font-size: var(--normal-font-size);
 }
 
@@ -107,10 +111,10 @@ button {
   font-weight: 600;
   color: var(--primary-background);
   background-color: transparent;
-  transition-duration: 0.2s;
   padding: var(--small-px) var(--medium-px);
-  border: 3px solid var(--primary-background);
   border-radius: 8px;
+  border: 3px solid var(--primary-background);
+  transition-duration: 0.2s;
 }
 button:hover {
   background-color: #1f97f930;

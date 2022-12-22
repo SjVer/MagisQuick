@@ -11,6 +11,14 @@
   input[type="number"] {
     width: calc(var(--large-font-size)*1.3);
   }
+
+  .num:not(:empty) {
+    font-weight: 600;
+    display: inline-block;
+    padding: var(--small-px) var(--medium-px);
+    border: 3px solid var(--grey-color);
+    border-radius: 8px;
+  }
 </style>
 
 <div style="width:85%">
@@ -34,17 +42,18 @@
       Gewenste gemiddelde:
       <input id="wanted_average"
         type="number" min="0" max="10" step="0.1" value="7.0"
-        onchange="roundInput(this, 1); calculateNeededGrade();"
+        onchange="roundInput(this, 1); //calculateNeededGrade();"
       />
     </p>
     <p>
       Weging:
       <input id="wanted_weight"
         type="number" min="0" max="10" step="1" value="1"
-        onchange="roundInput(this, 0); calculateNeededGrade();"
+        onchange="roundInput(this, 0); //calculateNeededGrade();"
       />
     </p>
-    <p>Cijfer nodig: <span id="grade_needed"></span></p>
+    <button onclick="calculateNeededGrade()">Bereken</button>
+    <div class="num" id="grade_needed"></div>
   </div>
 
   <h3 class="bold">Wat je gaat staan</h3>
@@ -53,17 +62,18 @@
       Voorspelde cijfer:
       <input id="new_grade"
         type="number" min="0" max="10" step="0.1" value="7"
-        onchange="roundInput(this, 1); calculateNewGrade();"
+        onchange="roundInput(this, 1); //calculateNewGrade();"
       />
     </p>
     <p>
       Weging:
       <input id="new_weight"
         type="number" min="0" max="10" step="1" value="1"
-        onchange="roundInput(this, 0); calculateNewGrade();"
+        onchange="roundInput(this, 0); //calculateNewGrade();"
       />
     </p>
-    <p>Nieuwe gemiddelde: <span id="new_average"></span></p>
+    <button onclick="calculateNewGrade()">Bereken</button>
+    <div class="num" id="new_average"></div>
   </div>
 
   <script>
@@ -89,10 +99,10 @@
     function changeSubject() {
       var grade = data[$("#subject").find(":selected").text()];
       cAvrg = grade;
-      $("#average").html(grade.grade);
 
-      calculateNeededGrade();
-      calculateNewGrade();
+      $("#average").html(grade.grade);
+      $("#grade_needed").html("");
+      $("#new_average").html("");
     }
 
     function calculateNeededGrade() {

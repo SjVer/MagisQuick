@@ -2,12 +2,19 @@
 
 {% block content %}
 
+<head>
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5903465862341811"
+    crossorigin="anonymous">
+  </script>
+</head>
+
 <style>
   .hbox {
     display: flex;
     height: 100%;
   }
-  .hbox > * {
+  .hbox > *:not(.meta) {
     display: block;
     width: 100%;
     height: auto;
@@ -24,66 +31,72 @@
   }
 
   .sidebar {
-    color: white;
     background: var(--secondary-background);
-    width: min-content !important;
     padding: var(--medium-px);
-    text-align: center;
-    display: flex;
-    flex-flow: column;
+    width: min-content !important;
+    flex-direction: column;
   }
-  .sidebar > * {
+  .sidebar:not(.desktop) { display: flex !important }
+
+  .sidebar div {
+    color: white;
+    text-align: left;
     display: block;
+    width: max-content !important;
     margin-top: var(--large-px);
   }
-  .sidebar > *:last-child {
+  .sidebar div:nth-last-child(2) {
     margin-bottom: var(--large-px);
   }
-
+  
   .sidebar_label {
     color: white;
     font-size: var(--medium-font-size);
-    height: 19px;
-    padding-top: 3px;
-    margin-right: 3px;
     text-align: left;
     text-decoration: none;
+    margin: 0px 10px;
   }
 </style>
 
 <div class="hbox">
 
-  <!-- icons margin -->
+  <!-- left margin -->
   <div class="sidebar desktop" style="padding: 0px 5px"></div>
 
   <!-- icons -->
   <div class="sidebar">
-    <a class="icon books" href="/boeken"></a>
-    <a class="icon calculator" href="/voorspel"></a>
-    <a class="icon graph" href="/tijdlijn"></a>
-    <div style="display:flex;flex:1 1"></div>
-    <a class="icon person" href="/account"></a>
-    <a class="icon setting" href="/instellingen"></a>
-    <a class="icon exit" href="/logout" id="uli"></a>
+    <div>
+      <a class="icon books" href="/boeken"></a>
+      <a class="sidebar_label desktop" href="/boeken">Boeken</a>
+    </div>
+    <div>
+      <a class="icon calculator" href="/voorspel"></a>
+      <a class="sidebar_label desktop" href="/voorspel">Voorspel</a>
+    </div>
+    <div>
+      <a class="icon graph" href="/tijdlijn"></a>
+      <a class="sidebar_label desktop" href="/tijdlijn">Tijdlijn</a>
+    </div>
+    <div>
+      <a class="icon chat" href="/chat"></a>
+      <a class="sidebar_label desktop" href="/chat">Chat</a>
+    </div>
+    <div style="flex-grow: 1"></div>
+    <div>
+      <a class="icon person" href="/account"></a>
+      <a class="sidebar_label desktop" href="/account">Account</a>
+    </div>
+    <div>
+      <a class="icon setting" href="/instellingen"></a>
+      <a class="sidebar_label desktop" href="/instellingen">Instellingen</a>
+    </div>
+    <div>
+      <a class="icon exit" href="/logout" id="uli"></a>
+      <a class="sidebar_label desktop" href="/logout" id="ull">Uitloggen</a>
+    </div>
+    <div class="mobile"></div>
   </div>
 
-  <!-- lables (desktop only) -->
-  <div class="sidebar desktop">
-    <a class="sidebar_label" href="/boeken">Boeken</a>
-    <a class="sidebar_label" href="/voorspel">Voorspel</a>
-    <a class="sidebar_label" href="/tijdlijn">Tijdlijn</a>
-    <div style="display:flex;flex:1 1"></div>
-    <a class="sidebar_label" href="/account">Account</a>
-    <a class="sidebar_label" href="/instellingen">Instellingen</a>
-    <a class="sidebar_label" href="/logout" id="ull">Uitloggen</a>
-  </div>
-
-  <!-- some resizing hack -->
-  <script>
-    window.onresize = () => $("#ull").css("height", $("#uli").height());
-    window.onresize();
-  </script>
-  
   <!-- content -->
   <div
     style="margin-top:var(--large-px); margin-left: var(--sorta-medium-px)"

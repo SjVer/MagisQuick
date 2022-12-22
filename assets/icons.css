@@ -20,6 +20,7 @@ a.icon {
 .icon.books::before {content: "a"}
 .icon.grade::before {content: "U"}
 .icon.graph::before {content: "K"}
+.icon.chat::before {content: "i"}
 .icon.exit::before {content: "P"}
 
 .icon.calculator {

@@ -7,3 +7,4 @@ src/front/views/__pycache__
 
 logs/
 venv/
+static/

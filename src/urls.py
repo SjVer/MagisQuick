@@ -20,11 +20,12 @@ from django.urls import path
 from .magister import api
 from .front import root_page, error_page
 from .front.account import login_page, logout_page, delete_user
-from .front.views.account import account_page
 from .front.views.books import boeken_page
-from .front.views.timeline import timeline_page
-from .front.views.settings import settings_page
 from .front.views.predict import predict_page
+from .front.views.timeline import timeline_page
+from .front.views.chat import chat_page
+from .front.views.account import account_page
+from .front.views.settings import settings_page
 
 urlpatterns = [
     path("admin/login/", login_page),
@@ -39,9 +40,10 @@ urlpatterns = [
     path("error/", error_page),
 
     path("", root_page),
-    path("account/", account_page),
     path("boeken/", boeken_page),
-    path("tijdlijn/", timeline_page),
     path("voorspel/", predict_page),
+    path("tijdlijn/", timeline_page),
+    path("chat/", chat_page),
+    path("account/", account_page),
     path("instellingen/", settings_page),
 ]
