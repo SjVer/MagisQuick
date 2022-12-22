@@ -27,6 +27,8 @@ a.icon {
   height: 22px;
   content: url("/static/icon-calculator.png");
 }
+
 @media (max-width: 500px) {
-  .icon.calculator { height: 15px }
+  .icon::before { font-size: 200% }
+  .icon.calculator { height: 30px }
 }
