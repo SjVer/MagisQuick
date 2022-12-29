@@ -152,5 +152,5 @@ LOGOUT_REDIRECT_URL = "/"
 CSRF_FAILURE_VIEW = "src.front.error_page"
 SILENCED_SYSTEM_CHECKS = ["auth.W004"]
 
-DEBUG = True
-LOG_LEVEL = "INFO"
+DEBUG = False
+LOG_LEVEL = "DEBUG"

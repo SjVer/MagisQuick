@@ -47,3 +47,6 @@ urlpatterns = [
     path("account/", account_page),
     path("instellingen/", settings_page),
 ]
+
+handler404 = "src.front.errors.error404_page"
+handler500 = "src.front.errors.error500_page"

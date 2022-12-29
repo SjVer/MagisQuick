@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.conf import settings
 
-from traceback import print_tb
 from inspect import trace
 from .. import log
 from ..magister.session import NotAuthenticatedException

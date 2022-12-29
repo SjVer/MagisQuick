@@ -63,18 +63,26 @@ def subjects(session: MagisterSession) -> List[Subject]:
     )
 
     subjects = []
+    names = []
     for app in sorted_apps:
         if not app["Vakken"]: continue
 
-        # geen normale lessen
+        name = app["Vakken"][0]["Naam"]
+        if not app["InfoType"] and name in names:
+            # this is a normal lesson and there is
+            # already another lesson of this subject 
+            continue
+
+        # filter out normal lessons
         # if app["InfoType"] == 0: continue
 
         dateparts = app["Start"].split("T", 1)[0].split("-")
         dateparts.reverse()
         date = "/".join(dateparts[:2])
 
+        names.append(name)
         subjects.append(Subject(
-            app["Vakken"][0]["Naam"],
+            name,
             app["InfoType"].readable(),
             date
         ))

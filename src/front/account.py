@@ -64,7 +64,7 @@ class LoginForm(AuthenticationForm):
 
 def login_page(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/logout")
 
     return LoginView.as_view(
         template_name = "account/login.html",
@@ -80,7 +80,7 @@ def logout_page(request: HttpRequest) -> HttpResponse:
 def delete_user(request: HttpRequest) -> HttpResponse:
     log.info(f"deleting user {request.user}")
     request.user.delete()
-    return HttpResponseRedirect("/logout")    
+    return HttpResponseRedirect("/login")
 
 @receiver(user_logged_in)
 def user_logged_in_callback(user: EUser, **kwargs):    

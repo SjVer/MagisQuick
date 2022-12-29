@@ -9,10 +9,11 @@ WARNING = 1
 INFO = 2
 DEBUG = 3
 
+USE_STDOUT = True
 LOG_FILE = f"logs/log-{dt.today().strftime('%d-%m-%Y')}.txt"
 
-if settings.DEBUG:
-    __log_level =  DEBUG
+if settings.DEBUG or USE_STDOUT:
+    __log_level = DEBUG
     __log_file = stdout
 else:
     __log_level = eval(settings.LOG_LEVEL)

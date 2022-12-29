@@ -17,10 +17,19 @@
   .icon.les::before {content: "a"}
   .icon.SO::before {content: "o"}
   .icon.SE::before {content: "o"}
+
+  .trans {
+    user-select: none;
+    color: transparent;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+  }
 </style>
 
 <div style="width:85%">
   <h1>{{title}}</h1>
+  
   <h3>
     De boeken voor deze vakken moet
     je vanmiddag mee naar huis nemen.
@@ -52,6 +61,40 @@
           {% endif %}
         </td>
         <td style="text-align:right;width:60pt">{{s.date}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <br>
+
+  <h3>
+    De boeken voor deze vakken moet
+    je vandaag mee naar school nemen.
+  </h3>
+
+  <table style="width:var(--big-width)">
+    <colgroup>
+      <col style="width:30px">
+      <col style="width:min-content">
+      <col style="width:min-content">
+    </colgroup>
+
+    <tr>
+      <th></th>
+      <th style="border-right:none">Vak</th>
+      <th style="border-left:none"></th>
+    </tr>
+
+    <!-- entries here -->
+    {% for s in subjects %}
+      <tr>
+        <td class="icon {{s.reason}}" style="text-align:center"></td>
+        <td style="border-right:none">{{s.name}}</td>
+        <td style="border-left:none">
+          {% if s.reason != "les" %}
+            <span class="reason">{{s.reason}}</span>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
   </table>

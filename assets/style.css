@@ -127,16 +127,13 @@ table {
 }
 
 th, td {
-  border-width: 0 0 0 1px;
+  border: 1px solid #ccc;
   overflow: hidden;
   vertical-align: middle;
   text-overflow: ellipsis;
-  border-style: solid;
-  border-color: #ccc;
   box-sizing: border-box;
   position: relative;
   padding: var(--small-px);
-  border: 1px solid #ccc;
 }
 
 .centered {
