@@ -86,6 +86,9 @@ class MagisterSession:
 			self.__authenticated = True
 			log.info(f"session authenticated (tenant: {self.user.tenant})")
 
+	def is_authenticated(self):
+		return self.__authenticated
+
 	def end_session(self):
 		# notifies the magister server that 
 		# this session is done

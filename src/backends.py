@@ -26,10 +26,11 @@ class EBackend(backends.ModelBackend):
                 log.info("checking new user authentication")
                 session = MagisterSession(user)
                 session.authenticate()
-                assert session.__MagisterSession_authenticated
+                assert session.is_authenticated()
                 set_current_session(session)
-            except Exception:
+            except Exception as e:
                 log.info("authentication failed, deleting new user")
+                log.debug(f"  {e}")
                 user.delete()
                 user = None
                 return
