@@ -27,8 +27,10 @@ def grades(session: MagisterSession) -> Dict[str, List[Grade]]:
     for g in raw_grades:
         # filter out grades that aren't actual
         # grades (such as averages)
-        if not g["CijferId"]: continue
-        if g["CijferKolom"]["KolomSoort"] != 1: continue
+        if (not g["CijferId"]) \
+        or g["CijferKolom"]["KolomSoort"] != 1 \
+        or g["CijferStr"] == "Inh":
+            continue
 
         # sort them by subject
         subject = g["Vak"]["Afkorting"]
@@ -57,6 +59,8 @@ def averages(session: MagisterSession) -> Dict[str, Grade]:
 
         # calculate average
         for g in gs:
+            if g["Cijfer"] == "Inh": continue
+            
             grade = cijfer_str_to_float(g["Cijfer"])
             total += grade * g["Weegfactor"]
             count += g["Weegfactor"]
