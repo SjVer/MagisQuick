@@ -47,7 +47,7 @@ def with_error_message(message: str):
                 return view_fn(request)
             except Exception as e:
                 name = e.__class__.__name__
-                log.error(f"an exception occurred: {name}")
+                log.error(f"an exception occurred: {name} ({e})")
 
                 if e.__class__ == NotAuthenticatedException:
                     new_message = "Kon niet authenticeren met Magister."

@@ -2,6 +2,9 @@
 {% block viewcontent %}
 
 <style>
+  .name { text-decoration: none }
+  .name:hover { text-decoration: underline }
+
   .reason {
     float: right;
     color: white;
@@ -47,14 +50,20 @@
       <th></th>
       <th style="border-right:none">Vak</th>
       <th style="border-left:none"></th>
-      <th>Datum</th>
+      <th style="text-align:right">Datum</th>
     </tr>
 
     <!-- entries here -->
-    {% for s in subjects %}
-      <tr>
+    {% for s in upcoming_subjects %}
+      <tr id="app-{{s.id}}">
         <td class="icon {{s.reason}}" style="text-align:center"></td>
-        <td style="border-right:none">{{s.name}}</td>
+        <td style="border-right:none">
+          <a
+            class="name" target="_blank"
+            href="{{app_url_start}}{{s.id}}">
+            {{s.name}}
+          </a>
+        </td>
         <td style="border-left:none">
           {% if s.reason != "les" %}
             <span class="reason">{{s.reason}}</span>
@@ -77,27 +86,39 @@
       <col style="width:30px">
       <col style="width:min-content">
       <col style="width:min-content">
+      <col style="width:min-content">
     </colgroup>
 
     <tr>
       <th></th>
       <th style="border-right:none">Vak</th>
       <th style="border-left:none"></th>
+      <th style="text-align:right">Tijd</th>
     </tr>
 
     <!-- entries here -->
-    {% for s in subjects %}
-      <tr>
+    {% for s in todays_subjects %}
+      <tr id="app-{{s.id}}">
         <td class="icon {{s.reason}}" style="text-align:center"></td>
-        <td style="border-right:none">{{s.name}}</td>
+        <td style="border-right:none">
+          <a
+            class="name" target="_blank"
+            href="{{app_url_start}}{{s.id}}">
+            {{s.name}}
+          </a>
+        </td>
         <td style="border-left:none">
           {% if s.reason != "les" %}
             <span class="reason">{{s.reason}}</span>
           {% endif %}
         </td>
+        <td style="text-align:right;width:60pt">{{s.date}}</td>
       </tr>
     {% endfor %}
   </table>
+
+  <div style="height:15px"></div>
+  (Klik op een vak om de afspraak te openen)
 </div>
 
 {% endblock %}

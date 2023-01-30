@@ -73,7 +73,8 @@ def login_page(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def logout_page(request: HttpRequest) -> HttpResponse:
-    get_session(request).end_session()
+    session = get_session(request)
+    if session: session.end_session()
     return LogoutView.as_view()(request)
 
 @login_required

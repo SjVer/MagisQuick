@@ -2,6 +2,11 @@
 {% block viewcontent %}
 
 <style>
+  .profile-img {
+    width: calc(3 * var(--large-px));
+    border-radius: 50%;
+  }
+
   .entry {
     display: block;
     margin: 5px 0px;
@@ -45,6 +50,8 @@
 <div>
   <h1>{{title}}</h1>
   
+  <img class="profile-img" src="../api/profile_img">
+  
   <h3 class="bold">Persoonlijke gegevens</h3>
   <div class="indented">
     <p class="entry">Naam: {{ full_name }}</p>
@@ -65,14 +72,16 @@
   
   <h3 class="bold">Beheer</h3>
   <div class="indented">
-    <a class="entry link" href="{{web_link}}">Open Magister</a>
-    <a class="entry link" href="{{acc_link}}">Beheer je Magister account</a>
+    <a class="entry link" target="_blank" href="{{web_link}}">Open Magister</a>
+    <a class="entry link" target="_blank" href="{{acc_link}}">Beheer je Magister account</a>
     <div style="height:5px"></div>
     <span id="rusure" class="error" hidden>Weet je het zeker?<br></span>
     <button onclick="delete_account()">Verwijder MagisQuick account</button>
   </div>
   
   <script>
+    // functionality behind the "gekopiëerd!" label
+
     var copied_label = document.getElementById("cplbl");
     copied_label.style.display = "none";
     

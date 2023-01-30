@@ -19,8 +19,6 @@ def cijfer_str_to_float(cijfer_str) -> float:
     return float(actual_grade)
 
 def grades(session: MagisterSession) -> Dict[str, List[Grade]]:
-    # TODO: include grade weight
-
     raw_grades = session.get_grades()
     grades = {}
 

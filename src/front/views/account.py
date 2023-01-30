@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from django.conf import settings
 
 from ...magister import get_session
+from ...magister.requests import get
 from .. import via_loading_page, with_error_message
 
 @login_required

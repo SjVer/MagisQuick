@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .magister import api
+from .magister import api, profile_img
 from .front import root_page, error_page
 from .front.account import login_page, logout_page, delete_user
 from .front.views.books import boeken_page
@@ -36,6 +36,7 @@ urlpatterns = [
     path("delete_user/", delete_user),
 
     path("api/search_tenants", api.search_tenants),
+    path("api/profile_img", profile_img),
     path("api/clear", api.clear),
     path("error/", error_page),
 

@@ -57,11 +57,12 @@ def get_challenge_authcode(session_id, return_url):
     
     # get js file
     js_file_id = r.text.split("src=\"js/account-", 1)[1].split(".js\"")[0]
+    log.debug(f"  account.js id: {js_file_id}")
     r = get(f"{ISSUER}/js/account-{js_file_id}.js")
     r.raise_for_status()
 
     # find relevant code
-    js = r.text.split("r[zi[0]]=(o=", 1)[1].split(".map", 1)[0]
+    js = r.text.split("[0]]=(o=", 1)[1].split(".map", 1)[0]
     split_index = js.find("],[") + 1
 
     # decrypt it
@@ -159,10 +160,13 @@ def authenticate(tenant_id, username, password) -> TokenSet:
             return get_tokenset(code)
         except Exception as e:
             log.error(f"failed to authenticate ({e.__class__.__name__})")
-            log.debug(f"  {e}")
+            log.error(f"  {e}")
             # delete cached stuff just in case they're the issue
             cache.delete("challenge_auth_code")
             cache.delete("challenge_auth_code_date")
+
+            # pass on error on last attempt
+            if a + 1 == ATTEMPTS: raise e
     return None
 
 # get tokenset using refresh token

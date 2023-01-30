@@ -15,12 +15,17 @@ from ... import figure_out
 def boeken_page(request: HttpRequest):
 	session = get_session(request)
 	session.require_userinfo()
-	subjects = figure_out.subjects(session)
+
+	todays_subjects = figure_out.todays_subjects(session)
+	upcoming_subjects = figure_out.upcoming_subjects(session)
+	app_url_start = f"https://{session.user.tenant}.magister.net/magister/#/agenda/huiswerk/"
 
 	return render(request, "views/boeken.html", {
 		"settings": settings,
 		"title": "Boeken",
 		"full_name": session.user.get_full_name(),
 		"date": datetime.today().strftime("%A %-d %B"),
-		"subjects": subjects,
+		"app_url_start": app_url_start,
+		"upcoming_subjects": upcoming_subjects,
+		"todays_subjects": todays_subjects,
 	})

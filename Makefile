@@ -14,8 +14,13 @@ freeze:
 	python -m pip freeze > requirements.txt
 
 collect:
-	rm -r static/
+	rm -r static/ || true
 	python manage.py collectstatic
+
+git-pull:
+	git stash push db.sqlite3
+	git pull
+	git stash pop
 
 serve:
 	clear -x

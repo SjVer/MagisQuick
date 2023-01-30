@@ -3,10 +3,10 @@
 {% block content %}
 
 <head>
-  <script async
+  <!-- <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5903465862341811"
     crossorigin="anonymous">
-  </script>
+  </script> -->
 </head>
 
 <style>
@@ -45,8 +45,11 @@
     width: max-content !important;
     margin-top: var(--large-px);
   }
-  .sidebar div:nth-last-child(2) {
-    margin-bottom: var(--large-px);
+
+  @media not (max-width: 500px) {
+    .sidebar div:nth-last-child(2) {
+      margin-bottom: var(--large-px);
+    }
   }
   
   .sidebar_label {

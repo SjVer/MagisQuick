@@ -33,7 +33,11 @@
       {% endfor %}
     </select>
     
-    <p>Gemiddelde: <span id="average"></span></p>
+    <p>
+      Gemiddelde:
+      <span id="average"></span>
+      (<span id="average_weight"></span>x)
+    </p>
   </div>
 
   <h3 class="bold">Wat je moet halen</h3>
@@ -101,6 +105,7 @@
       cAvrg = grade;
 
       $("#average").html(grade.grade);
+      $("#average_weight").html(grade.weight);
       $("#grade_needed").html("");
       $("#new_average").html("");
     }
