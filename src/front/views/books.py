@@ -23,6 +23,7 @@ def boeken_page(request: HttpRequest):
 	return render(request, "views/boeken.html", {
 		"settings": settings,
 		"title": "Boeken",
+		"admin": session.user.is_superuser,
 		"full_name": session.user.get_full_name(),
 		"date": datetime.today().strftime("%A %-d %B"),
 		"app_url_start": app_url_start,

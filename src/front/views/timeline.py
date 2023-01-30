@@ -26,6 +26,7 @@ def timeline_page(request: HttpRequest):
 	return render(request, "views/tijdlijn.html", {
 		"settings": settings,
 		"title": "Tijdlijn",
+		"admin": session.user.is_superuser,
 		"first_date": dates[0],
 		"last_date": dates[-1],
 		"first_date_f": fmtdate(dates[0]),

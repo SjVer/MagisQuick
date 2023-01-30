@@ -24,6 +24,7 @@ def predict_page(request: HttpRequest):
 	return render(request, "views/voorspel.html", {
 		"settings": settings,
 		"title": "Voorspel",
+		"admin": session.user.is_superuser,
 		"subjects": list(averages.keys()),
 		"averages": json_averages,
 	})

@@ -16,4 +16,5 @@ def chat_page(request: HttpRequest):
 	return render(request, "views/chat.html", {
 		"settings": settings,
 		"title": "Chat",
+		"admin": session.user.is_superuser,
 	})

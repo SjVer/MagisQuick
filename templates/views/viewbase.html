@@ -93,6 +93,12 @@
       <a class="icon setting" href="/instellingen"></a>
       <a class="sidebar_label desktop" href="/instellingen">Instellingen</a>
     </div>
+    {% if admin %}
+    <div>
+      <a class="icon setting" href="/admin"></a>
+      <a class="sidebar_label desktop" href="/admin">Beheer</a>
+    </div>
+    {% endif %}
     <div>
       <a class="icon exit" href="/logout" id="uli"></a>
       <a class="sidebar_label desktop" href="/logout" id="ull">Uitloggen</a>
