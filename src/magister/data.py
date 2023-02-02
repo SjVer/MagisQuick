@@ -42,3 +42,17 @@ class GradeData(TypedDict):
 class RelatedGradeData(TypedDict):
     Cijfer: str
     Weegfactor: int
+
+class PersonalMentorData(TypedDict):
+    Achternaam: str
+    Tussenvoegsel: str
+    Voorletters: str
+    Links: List[str]
+
+class GroupData(TypedDict):
+    Id: str
+    Links: List[dict]
+
+class CourseData(TypedDict):
+    Id: int
+    Group: GroupData

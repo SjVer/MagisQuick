@@ -1,19 +1,22 @@
 {% load static %}
 
-<!-- load these now that we're loading anyway -->
-<link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
-<link rel="stylesheet" href="{% static 'style.css' %}">
-<link rel="stylesheet" href="{% static 'icons.css' %}">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
-<!-- this is awfull but we need it -->
-{% if title == "Tijdlijn" %}
-  <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
-{% endif %}
-
-<!-- for mobile devices -->
-<meta content='width=device-width, initial-scale=1' name='viewport'/>
+<head>
+  <!-- load these now that we're loading anyway -->
+  <link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'icons.css' %}">
+  <link rel="icon" href="{% static 'logo.svg' %}" sizes="any" type="image/svg+xml">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  
+  <!-- this is awful but we need it -->
+  {% if title == "Tijdlijn" %}
+    <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
+  {% endif %}
+  
+  <!-- for mobile devices -->
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+</head>
 
 <script>
   $.ajax({

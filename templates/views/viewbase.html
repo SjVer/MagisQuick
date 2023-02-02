@@ -17,17 +17,10 @@
   .hbox > *:not(.meta) {
     display: block;
     width: 100%;
-    height: auto;
-    margin: 0 auto;
     float: left;
   }
   .hbox::after {
     clear: both;
-  }
-
-  .scrolled {
-    overflow-x: hidden;
-    overflow-y: scroll;
   }
 
   .sidebar {
@@ -59,6 +52,15 @@
     text-decoration: none;
     margin: 0px 10px;
   }
+
+  .content {
+    height: 100%;
+    max-height: 100%;
+  }
+  .content-div {
+    padding-top: var(--large-px);
+    padding-left: var(--sorta-medium-px);
+  }
 </style>
 
 <div class="hbox">
@@ -89,16 +91,16 @@
       <a class="icon person" href="/account"></a>
       <a class="sidebar_label desktop" href="/account">Account</a>
     </div>
-    <div>
-      <a class="icon setting" href="/instellingen"></a>
-      <a class="sidebar_label desktop" href="/instellingen">Instellingen</a>
-    </div>
     {% if admin %}
     <div>
       <a class="icon setting" href="/admin"></a>
       <a class="sidebar_label desktop" href="/admin">Beheer</a>
     </div>
     {% endif %}
+    <div>
+      <a class="icon setting" href="/instellingen"></a>
+      <a class="sidebar_label desktop" href="/instellingen">Instellingen</a>
+    </div>
     <div>
       <a class="icon exit" href="/logout" id="uli"></a>
       <a class="sidebar_label desktop" href="/logout" id="ull">Uitloggen</a>
@@ -107,11 +109,11 @@
   </div>
 
   <!-- content -->
-  <div
-    style="margin-top:var(--large-px); margin-left: var(--sorta-medium-px)"
-    class="scrolled">
-    {% block viewcontent %}
-    {% endblock %}
+  <div class="content scrolled">
+    <div class="content-div">
+      {% block viewcontent %}
+      {% endblock %}
+    </div>
   </div>
 </div>
 

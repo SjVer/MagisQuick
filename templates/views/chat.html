@@ -1,13 +1,180 @@
 {% extends "views/viewbase.html" %}
 {% block viewcontent %}
 
+{% load static %}
+
 <style>
+
+.parent {
+  max-height: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: calc(min(var(--big-width), 95%));
+  max-height: 90%;
+  margin-top: 20px;
+}
+
+.messages {
+  flex: 1;
+}
+
+.separator {
+  width: 100%;
+  text-align: center;
+  color: var(--grey-color);
+  font-size: calc(0.8 * var(--normal-font-size));
+}
+.separator::before { content: "─────────── " }
+.separator::after { content: " ───────────" }
+
+.message {
+  width: fit-content;
+  margin: 10px 0px;
+}
+.message .text {
+  display: block;
+  padding: 6px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+}
+.message .time {
+  display: block;
+  padding-top: 3px;
+  font-size: calc(0.8 * var(--normal-font-size));
+}
+
+.message.in .text {
+  border-color: grey;
+  background-color: #cfcfcf50;
+}
+
+.message.out {
+  margin-right: 10px;
+  margin-left: auto;
+}
+.message.out .text {
+  border-color: var(--primary-background);
+  background-color: var(--opaque-blue);
+}
+.message.out .time {
+  width: 100%;
+  text-align: right;
+}
+
+.input {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.input-field, .input-field:focus {
+  flex-grow: 1;
+  padding: 4px 10px;
+  margin-right: 5px;
+  border-width: 3px;
+  border-radius: 8px;
+}
+
+button {
+  width: min-content;
+  height: min-content;
+  aspect-ratio: 1 / 1;
+  padding: 4px;
+}
+button img {
+  height: 22px;
+  width: 22px;
+}
 
 </style>
 
-<div>
+<div class="parent">
   <h1>{{title}}</h1>
-  
+  <h3>Stuur privéberichten jouw mentor, {{mentor_name}}.</h3>
+
+  <div class="container">
+    <div class="messages scrolled">
+      <div class="separator">gisteren</div>
+      <div class="message out">
+        <span class="text">Hoi! Ik heb een vraag!</span>
+        <span class="time">12:35</span>
+      </div>
+      <div class="message in">
+        <span class="text">Goeiemiddag! Wat is je vraag?</span>
+        <span class="time">12:36</span>
+      </div>
+      <div class="message out">
+        <span class="text">Waarom zijn bananen krom?</span>
+        <span class="time">12:38</span>
+      </div>
+      <div class="separator">vandaag</div>
+      <div class="message in">
+        <span class="text">Als ze recht zijn vallen ze om!</span>
+        <span class="time">8:12</span>
+      </div>
+    </div>
+    <div class="input">
+      <input class="input-field" placeholder="Typ een bericht...">
+      <button style="vertical-align:bottom" onclick="submit()">
+        <img src="{% static 'icon-send.png' %}">
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function submit() {
+      let text = $(".input-field").val().trim();
+      if (!text) return;
+
+      $(".input-field").val("");
+
+      let date = new Date();
+      let hours = date.getHours().toString().padStart(2, "0");
+      let minutes = date.getMinutes().toString().padStart(2, "0");
+
+      $(".messages").append(
+        `<div class="message out">
+          <span class="text">${text}</span>
+          <span class="time">${hours}:${minutes}</span>
+        </div>`
+      );
+
+      setTimeout(imitate_response, 3000);
+    }
+    
+    function imitate_response() {
+      let text = "Daar moet ik even over nadenken...";
+
+      let date = new Date();
+      let hours = date.getHours().toString().padStart(2, "0");
+      let minutes = date.getMinutes().toString().padStart(2, "0");
+
+      $(".messages").append(
+        `<div class="message in">
+          <span class="text">${text}</span>
+          <span class="time">${hours}:${minutes}</span>
+        </div>`
+      );
+    }
+
+    $(".input-field").keypress((e) => {
+      if (e.keyCode === 13) {
+        if (e.shiftKey) {
+          // Doesn't do anything
+          let text = $(".input-field").val();
+          $(".input-field").val(text + "\n");
+        } else submit();
+      }
+    });
+  </script>
 </div>
 
 {% endblock %}

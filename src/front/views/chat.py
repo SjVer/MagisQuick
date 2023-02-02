@@ -11,10 +11,10 @@ from ...magister import get_session
 @with_error_message("De chat kon niet geladen worden.")
 def chat_page(request: HttpRequest):
 	session = get_session(request)
-	session.require_userinfo()
 
 	return render(request, "views/chat.html", {
 		"settings": settings,
 		"title": "Chat",
 		"admin": session.user.is_superuser,
+		"mentor_name": "M. Mentor",
 	})

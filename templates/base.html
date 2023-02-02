@@ -3,13 +3,16 @@
 {% load static %}
 
 <!-- fonts -->
-<link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
-<link rel="stylesheet" href="{% static 'style.css' %}">
-<link rel="stylesheet" href="{% static 'icons.css' %}">
+<head>
+    <link rel="stylesheet" href="//use.typekit.net/zkq0zzv.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'icons.css' %}">
+    <link rel="icon" href="{% static 'logo.svg' %}" sizes="any" type="image/svg+xml">
+    
+    <meta content='height=device-height, width=device-width, initial-scale=1' name='viewport'/>
 
-<meta content='height=device-height, width=device-width, initial-scale=1' name='viewport'/>
+    <title>{{title}} - {{settings.APPNAME}}</title>
+</head>
 
-<!-- <icon>{{settings.ICON_PATH}}</icon> -->
-<title>{{title}} - {{settings.APPNAME}}</title>
 
 {% block content %}{% endblock %}
